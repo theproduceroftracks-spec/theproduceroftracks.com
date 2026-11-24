@@ -1,0 +1,142 @@
+/* The Blood Still Speaks · FIND ME track 4 encounter. Self-contained, like The Roof, The Well and Medicine.
+   Shares the FIND ME encounter language: top bar, song / Scripture / Father / TPoT distinct, sections I–IV, prayer, sources. */
+:root {
+  --night: #16120e; --paper: #ece1c8; --cream: #f0dcb8; --cream-dim: #c7b598;
+  --clay: #d08a5e; --line: #3f3428; --serif: Georgia, "Times New Roman", serif;
+  --mono: ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+@property --v { syntax: "<number>"; inherits: true; initial-value: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--night); color: #e7dcc5; font: 18px/1.65 var(--serif); }
+a { color: var(--cream); text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--cream); outline-offset: 3px; }
+[tabindex="-1"]:focus { outline: none; }
+[hidden] { display: none !important; }
+.skip { position: absolute; left: -999px; top: 8px; z-index: 9; background: var(--cream); color: var(--night); padding: 10px 14px; }
+.skip:focus { left: 8px; }
+
+/* top bar: always a visible way back (hidden inside the FIND ME reader, which has its own) */
+.top {
+  position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 12px; justify-content: space-between;
+  padding: max(6px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 6px max(14px, env(safe-area-inset-left));
+  background: var(--night); border-bottom: 1px solid var(--line); font: 15px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.top a { display: inline-flex; align-items: center; min-height: 44px; color: var(--cream); }
+.top .back { font-weight: 600; text-decoration: none; }
+.top .where { color: var(--cream-dim); font: 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+.in-reader .top { display: none; }
+.in-reader-only { display: none; }
+.in-reader .in-reader-only { display: block; }
+
+/* the field: one quiet change, when Abel's voice is found */
+.art { display: block; width: 100%; height: auto; --v: 0; }
+.art[data-state="heard"] { --v: 1; }
+.art .ground-line { opacity: calc(.12 + var(--v) * .78); }
+.art .voice { opacity: calc(var(--v) * .55); }
+@media (prefers-reduced-motion: no-preference) { .art { transition: --v 2.2s cubic-bezier(.3, .1, .2, 1); } }
+
+.hero { position: relative; max-width: 1100px; margin: 0 auto; }
+.hero .art { height: clamp(180px, 36svh, 320px); }   /* phone: a band of the field, title on the first screen */
+.hero-copy { padding: 14px max(20px, env(safe-area-inset-left)) 8px; position: relative; }
+.kicker, .num, .song figcaption, .src, .note, .quiet, .pref, .label, .who {
+  font: 12px/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--cream-dim);
+}
+h1 { margin: 6px 0 10px; font: 400 clamp(2.6rem, 13vw, 5.4rem)/.92 var(--serif); letter-spacing: -.02em; color: var(--paper); text-shadow: 0 2px 18px #000; }
+.lede { margin: 0 0 18px; max-width: 30ch; font-size: 1.12rem; color: var(--paper); }
+.listen, .return { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px;
+  background: var(--cream); color: var(--night); border: 1px solid var(--cream);
+  font: 600 16px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif; text-decoration: none; cursor: pointer;
+}
+.btn.ghost { background: transparent; color: var(--cream); }
+
+/* reading */
+.reading { max-width: 680px; margin: 0 auto; padding: 8px max(20px, env(safe-area-inset-left)) 40px; }
+.move { padding: 46px 0 8px; border-top: 1px solid var(--line); margin-top: 34px; scroll-margin-top: 64px; }
+.move:first-child { border-top: 0; margin-top: 0; }
+.in-reader .move { scroll-margin-top: 12px; }
+.num { margin: 0; color: var(--clay); }
+h2 { margin: 4px 0 18px; font: 400 clamp(2rem, 8.5vw, 3rem)/1.05 var(--serif); color: var(--paper); }
+h3 { margin: 30px 0 12px; font: 600 1.25rem/1.3 var(--serif); color: var(--paper); scroll-margin-top: 70px; }
+
+/* four kinds of text, four looks: song, Scripture, early Church, TPoT */
+.song { margin: 0 0 22px; padding: 2px 0 2px 16px; border-left: 2px solid var(--clay); }
+.song figcaption { margin-bottom: 4px; }
+.song p { margin: 0; font: italic 1.2rem/1.5 var(--serif); color: var(--cream); }
+.scripture { margin: 0 0 18px; padding: 14px 16px; background: #1e1913; border: 1px solid var(--line); }
+.scripture p { margin: 0 0 6px; color: var(--paper); }
+.scripture cite { font: 12px/1.5 var(--mono); letter-spacing: .08em; color: var(--cream-dim); font-style: normal; }
+.father { margin: 26px 0; padding: 18px 0 4px; border-top: 1px dashed var(--line); }
+.father .src { margin: 0 0 10px; }
+.father .src strong { color: var(--paper); font-weight: 600; }
+.father .src cite { font-style: italic; text-transform: none; letter-spacing: 0; font-family: var(--serif); font-size: 15px; }
+.father blockquote { margin: 0 0 12px; padding: 0; }
+.father blockquote p { margin: 0; font: 1.18rem/1.5 var(--serif); color: var(--paper); }
+.father a, .endlinks a, .sources a { display: inline-flex; align-items: center; min-height: 44px; }
+.tpot { padding: 12px 14px; border: 1px solid var(--line); border-left: 3px solid var(--cream-dim); }
+.label { display: inline-block; margin-right: 8px; padding: 1px 6px; border: 1px solid var(--cream-dim); }
+.note { color: var(--cream-dim); }
+
+/* Who speaks? */
+.speakers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 18px 0 10px; }
+.speakers .quiet { grid-column: 1 / -1; margin: 0; }
+.speakers button {
+  min-height: 52px; padding: 8px 6px; cursor: pointer; background: transparent; color: var(--paper);
+  border: 1px solid #6f604c; font: 1.05rem/1.2 var(--serif);
+}
+.speakers button:hover { border-color: var(--cream); }
+.speakers button[aria-pressed="true"] { background: var(--cream); color: var(--night); border-color: var(--cream); }
+.finding { min-height: 1.5em; margin: 0 0 14px; color: var(--cream); font-style: italic; }
+.finding:empty { margin: 0; min-height: 0; }
+.passage { padding: 16px; background: #1e1913; border: 1px solid var(--line); }
+.passage p { margin: 0 0 10px; color: #d9cdb4; }
+.passage sup { font: 11px/1 var(--mono); color: var(--cream-dim); margin-right: 2px; }
+.who { display: inline-block; margin-right: 6px; padding: 0 5px; border: 1px solid var(--line); vertical-align: 2px; font-size: 10px; }
+.js .who { display: none; }
+.js [data-show] .say[data-who] .who { display: inline-block; }
+.say, .blood { transition: background-color .4s, color .4s; }
+.js .passage[data-show] p { color: #8f8470; }
+.js .passage[data-show="god"] .say[data-who="god"],
+.js .passage[data-show="cain"] .say[data-who="cain"],
+.js .passage[data-show="eve"] .say[data-who="eve"] { color: var(--paper); background: #3a2e22; box-shadow: 0 0 0 2px #3a2e22; }
+.js .passage[data-show="abel"] .blood { color: #fff1dc; background: #5a3423; box-shadow: 0 0 0 2px #5a3423; }
+.abel { margin-top: 22px; scroll-margin-top: 72px; }
+.in-reader .abel { scroll-margin-top: 16px; }
+.js .abel:not(.on) { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .abel.on { animation: bs-arrive .7s ease both; }
+}
+@media (prefers-reduced-motion: reduce) { .say, .blood { transition: none; } }
+@keyframes bs-arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* depth at the visitor's pace */
+.deep { margin: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.deep summary { min-height: 52px; display: flex; align-items: center; cursor: pointer; color: var(--cream); font: 600 1.05rem/1.3 var(--serif); }
+.deep[open] { padding-bottom: 10px; }
+.deep ul { padding-left: 1.1em; }
+.deep li { margin-bottom: 8px; }
+
+.pray .prayer { font: 1.3rem/1.6 var(--serif); color: var(--paper); }
+.carry { margin: 0 0 12px; font: italic 1.5rem/1.35 var(--serif); color: var(--paper); }
+.carry span { display: block; margin-top: 4px; font: 12px/1.5 var(--mono); font-style: normal; letter-spacing: .1em; color: var(--cream-dim); }
+.return { margin-top: 22px; }
+.sources ul { padding-left: 1.1em; }
+.sources li { margin-bottom: 8px; }
+.endlinks { display: flex; flex-wrap: wrap; gap: 0 18px; }
+.foot { border-top: 1px solid var(--line); padding: 18px 20px 30px; color: var(--cream-dim); font: 13px/1.5 system-ui, sans-serif; text-align: center; }
+
+@media (min-width: 900px) {
+  .hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: end; gap: 40px; padding: 28px 40px 0; }
+  .hero .art { height: auto; max-height: 82vh; border: 1px solid var(--line); }
+  .hero-copy { margin: 0 0 30px; padding: 0; }
+  .reading { padding-top: 30px; }
+}
+@media (max-width: 360px) {
+  body { font-size: 17px; }
+  .speakers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .top { gap: 6px; font-size: 14px; }
+}
+@media print { .top, .speakers, .finding, .listen, .return { display: none !important; } .abel { display: block !important; } }
