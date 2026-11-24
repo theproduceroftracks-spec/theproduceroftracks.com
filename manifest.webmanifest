@@ -1,0 +1,19 @@
+{
+  "id": "/",
+  "name": "The Producer of Tracks",
+  "short_name": "TPoT",
+  "description": "Songs, Scripture and the voices who read it before us. Listen, step into an encounter, come back anytime.",
+  "start_url": "/?source=app",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#121210",
+  "theme_color": "#20221d",
+  "lang": "en",
+  "categories": ["music", "books", "lifestyle"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
