@@ -6,7 +6,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script src="/assets/tpot-measure.js?v=c161634ffb" data-endpoint="https://tpot-listens.shadowline-strategic-llc.workers.dev/e" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#20221d">
+<meta name="theme-color" content="#0e0d0b">
 <title>FIND ME | The Producer of Tracks</title>
 <meta name="description" content="Hear all 11 tracks from FIND ME by The Producer of Tracks, in album order. Raw rock and grunge-soul rooted in Scripture.">
 <link rel="canonical" href="https://theproduceroftracks.com/find-me/">
@@ -33,23 +33,27 @@
 <script src="/find-me/lyrics.js" defer></script>
 <link rel="stylesheet" href="/find-me/story.css">
 <script src="/find-me/story.js" defer></script>
+<script src="/find-me/player.js?v=1" defer></script>
 <script src="/find-me/press.js" defer></script>
 <script src="/assets/give.js" defer></script>
+<link rel="stylesheet" href="/assets/tpot-2026.css?v=1">
+<link rel="stylesheet" href="/find-me/player.css?v=1">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="top">
-  <a class="brand" href="/">THE PRODUCER OF TRACKS<span>.</span></a>
-  <nav aria-label="Artist site"><a href="/#rooms">Encounters</a></nav>
+  <a class="brand" href="/">The Producer of Tracks<span>.</span></a>
+  <nav class="site-nav" aria-label="Site"><a href="/find-me/" aria-current="page">FIND ME</a><a href="/#rooms">Encounters</a><a href="/#listen">Singles</a><a href="/#about">About</a></nav>
 </header>
 <main id="main" class="album-page" tabindex="-1">
+  <div class="album-ambient" aria-hidden="true"></div>
   <section class="album-intro" aria-labelledby="album-title">
     <figure class="album-art"><img src="/assets/find-me-cover.jpg" width="1000" height="1000" alt="FIND ME cover art showing a lone figure walking through a stone passage toward the light" fetchpriority="high"></figure>
     <div class="album-copy">
       <p class="eyebrow">The Producer of Tracks</p>
       <h1 id="album-title">FIND ME<span>.</span></h1>
       <p class="album-lede">Raw rock and grunge-soul. Eleven songs about shame, grace and the way back, rooted in Scripture.</p>
-      <p class="album-runtime">11 tracks · 64:01</p>
+      <p class="album-runtime">11 songs · 64:01 · Free to hear</p>
       <div class="album-actions">
         <button type="button" class="button primary" id="play-album" hidden><span aria-hidden="true">▶</span> Play full album</button>
         <a href="#tracklist">Track stories</a>
@@ -63,9 +67,21 @@
   <div id="listening-start" aria-hidden="true"></div>
   <section class="album-player" aria-labelledby="now-playing-title">
     <h2 class="eyebrow" id="now-playing-title">Album player</h2>
-    <p id="now-playing" role="status" tabindex="-1">1 of 11 · Same Well, Same Thirst</p>
+    <div class="np-row">
+      <img class="np-art" src="/assets/find-me-cover.jpg" width="1000" height="1000" alt="" loading="lazy">
+      <div class="np-meta">
+        <p id="now-playing" role="status" tabindex="-1">1 of 11 · Same Well, Same Thirst</p>
+        <p class="np-title" data-np-title aria-hidden="true"></p>
+        <p class="np-sub" data-np-sub aria-hidden="true"></p>
+      </div>
+      <div class="np-transport" data-np-transport hidden>
+        <button type="button" class="np-btn" data-np="prev" data-track="player-prev" aria-label="Previous track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2.2v14H6zM19 5.2v13.6L9.4 12z" fill="currentColor"/></svg></button>
+        <button type="button" class="np-btn np-play" data-np="toggle" data-track="player-toggle" aria-label="Play"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.2v13.6L19 12z" fill="currentColor"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z" fill="currentColor"/></svg></button>
+        <button type="button" class="np-btn" data-np="next" data-track="player-next" aria-label="Next track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.8 5H18v14h-2.2zM5 5.2v13.6L14.6 12z" fill="currentColor"/></svg></button>
+      </div>
+    </div>
     <audio data-listen-endpoint="https://tpot-listens.shadowline-strategic-llc.workers.dev/listen" id="album-audio" controls preload="none" aria-labelledby="now-playing" src="/assets/find-me-e3b/01.mp3"></audio>
-    <div id="album-seek" hidden><label for="album-position">Jump within track</label> <input id="album-position" type="range" min="0" max="0" step="1" value="0" disabled> <output id="album-position-time" for="album-position">0:00</output></div>
+    <div id="album-seek" hidden><label for="album-position">Jump within track</label> <output id="album-position-time" for="album-position">0:00</output> <input id="album-position" type="range" min="0" max="0" step="1" value="0" disabled> <span class="np-dur" data-np-dur aria-hidden="true"></span></div>
     <p class="player-error" id="player-error" role="status" hidden></p>
 
   </section>
@@ -97,6 +113,7 @@
   <section class="album-section" id="tracklist" aria-labelledby="tracklist-title">
     <h2 id="tracklist-title">Tracklist</h2>
     <p class="tracks-intro">Every song has a story entry. Open one while the album keeps playing, then come back to the track.</p>
+    <ul class="tracks-key" aria-hidden="true"><li><i></i>Encounter open</li><li><i class="pending"></i>Story chapter in preparation</li></ul>
     <ol class="tracks">
       <li><button type="button" class="track" hidden data-src="/assets/find-me-e3b/01.mp3" aria-label="Play Same Well, Same Thirst"><span>Same Well, Same Thirst</span><span class="track-length" aria-hidden="true">5:16</span></button><noscript><a href="/assets/find-me-e3b/01.mp3">Same Well, Same Thirst (5:13)</a></noscript>
         <div class="story" id="story-1"><p class="story-ref">John 4 · The woman at the well</p><p class="story-line">“I came to the well I already knew”</p><p class="story-links"><a class="story-open" href="/well/#arrival" data-chapter="The Well">Open The Well</a><a href="#lyrics-1">Lyrics</a></p></div>
@@ -1480,7 +1497,7 @@ Forgive again</p></details>
 
   <section class="album-section" aria-labelledby="credits-title">
     <h2 id="credits-title">Credits</h2>
-    <p>Written, composed and produced by Patrick Ramon Hernandez.</p>
+    <p>Written, composed and produced by Patrick Hernandez.</p>
     <p>Built from his original writing, guitar and vocal recordings, with technology-assisted production shaping the final performances.</p>
     <p>Released by Shadowline Strategic LLC.</p>
   </section>
@@ -1509,8 +1526,8 @@ Forgive again</p></details>
   <iframe title="Story chapter" data-reader-frame></iframe>
 </dialog>
 <footer class="foot">
-  <p><a href="/#listen">More music</a> · <a href="/#about">Contact &amp; privacy</a></p>
-  <p>© 2026 Shadowline Strategic LLC</p>
+  <p><a href="/">Home</a> · <a href="/#rooms">Encounters</a> · <a href="/#listen">More music</a> · <a href="/#about">Contact &amp; privacy</a></p>
+  <p class="legal">© 2026 Shadowline Strategic LLC</p>
 </footer>
 </body>
 </html>
