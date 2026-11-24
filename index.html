@@ -6,7 +6,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script src="/assets/tpot-measure.js?v=c161634ffb" data-endpoint="https://tpot-listens.shadowline-strategic-llc.workers.dev/e" defer></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#20221d">
+<meta name="theme-color" content="#0e0d0b">
 <title>The Producer of Tracks | FIND ME, music &amp; encounters</title>
 <meta name="description" content="Listen to FIND ME by The Producer of Tracks. Raw rock and grunge-soul with hip-hop influence, rooted in Scripture.">
 <link rel="canonical" href="https://theproduceroftracks.com/">
@@ -33,6 +33,7 @@
 <meta name="apple-mobile-web-app-title" content="TPoT">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="stylesheet" href="styles.css?v=roof-live">
+<link rel="stylesheet" href="/assets/tpot-2026.css?v=1">
 <script>document.documentElement.classList.add('js')</script>
 <script src="/assets/give.js" defer></script>
 </head>
@@ -40,57 +41,66 @@
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="top">
-  <a class="brand" href="#home" data-go="home">THE PRODUCER OF TRACKS<span>.</span></a>
+  <a class="brand" href="#home" data-go="home">The Producer of Tracks<span>.</span></a>
+  <nav class="site-nav" aria-label="Site"><a href="/find-me/">FIND ME</a><a href="#rooms">Encounters</a><a href="#listen">Singles</a><a href="#about">About</a></nav>
   <button class="textmode" type="button" aria-pressed="false" data-textmode>Text version</button>
 </header>
 
 <main id="main">
 
 <!-- ============ HOME ============ -->
-<section class="view" id="home" data-view="home" aria-labelledby="home-h">
+<section class="view hx" id="home" data-view="home" aria-labelledby="home-h">
   <h1 id="home-h" class="visually-hidden">The Producer of Tracks</h1>
-  <nav class="home-paths" aria-label="Where to start">
-    <a class="home-path home-path-well" href="/well/">
-      <span class="home-path-copy">
-        <span class="home-path-label">John 4</span>
-        <strong>The Well</strong>
-        <span class="home-path-action">Enter the Well <span aria-hidden="true">→</span></span>
-      </span>
-      <span class="home-path-art" aria-hidden="true"></span>
-    </a>
-    <a class="home-path home-path-album" href="/find-me/">
-      <span class="home-path-copy">
-        <span class="home-path-label">11 tracks · Listen free</span>
-        <strong>FIND ME</strong>
-        <span class="home-path-action">Listen to FIND ME <span aria-hidden="true">▶</span></span>
-      </span>
-      <img class="home-path-art" src="/assets/find-me.jpg" width="720" height="720" alt="">
-    </a>
-  </nav>
+  <div class="hx-hero">
+    <div class="hx-glow" aria-hidden="true"></div>
+    <a class="hx-cover" href="/find-me/" tabindex="-1" aria-hidden="true"><img src="/assets/find-me-cover.jpg" width="1000" height="1000" alt="" fetchpriority="high"></a>
+    <div class="hx-copy">
+      <div class="hx-titleblock"><p class="hx-kicker">The album · Free to hear</p>
+      <h2 class="hx-title">FIND ME<span>.</span></h2></div>
+      <p class="hx-lede">Eleven songs about shame, grace and the way back, rooted in Scripture.</p>
+      <p class="hx-meta">Raw rock and grunge-soul · 11 songs · 64 minutes</p>
+      <div class="hx-actions">
+        <a class="hx-btn hx-btn-primary" href="/find-me/"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.8v10.4L13 8z" fill="currentColor"/></svg> Listen to FIND ME</a>
+        <a class="hx-btn" href="#rooms">Step into an encounter</a>
+      </div>
+    </div>
+  </div>
 
   <div class="continue" data-continue hidden>
     <a href="#rooms"><span class="eyebrow">Pick up where you left off</span><strong data-continue-title></strong><span data-continue-place></span><span class="continue-go" aria-hidden="true">→</span></a>
   </div>
 
-  <nav class="home-secondary" aria-label="More to explore">
-    <a href="#rooms">All encounters <span aria-hidden="true">→</span></a>
-    <a href="#listen">Singles &amp; press <span aria-hidden="true">→</span></a>
-  </nav>
+  <div class="hx-statement"><p>The Producer of Tracks makes raw, Scripture-rooted music about shame, grace and the way back.</p></div>
 
-  <section class="singles" aria-labelledby="singles-h">
-    <h2 id="singles-h" class="eyebrow">Singles · out now</h2>
-    <div class="single">
-      <img src="assets/bid-me-come.jpg" width="96" height="96" alt="Bid Me Come single cover: a hand grips a forearm rising out of a storm sea, engraved in cream and black" loading="lazy">
-      <div>
-        <p class="single-title">BID ME COME</p>
-        <p class="single-links"><a href="#listen" data-go="listen">Play here <span aria-hidden="true">▶</span></a><a href="https://open.spotify.com/track/58xMKg0IJb6fF8shOg2Est" rel="noopener">Spotify <span aria-hidden="true">↗</span></a><a href="https://music.apple.com/us/album/bid-me-come-single/6826379425" rel="noopener">Apple Music <span aria-hidden="true">↗</span></a><a href="https://distrokid.com/hyperfollow/theproduceroftracks/bid-me-come" rel="noopener">All platforms <span aria-hidden="true">↗</span></a><a href="/bid-me-come/">About the song <span aria-hidden="true">→</span></a></p>
-      </div>
+  <section class="hx-section" aria-labelledby="hx-enc-h">
+    <div class="hx-head">
+      <p class="hx-kicker">Encounters with Jesus</p>
+      <h2 class="hx-h" id="hx-enc-h">Step inside the songs.</h2>
+      <p class="hx-sub">The songs are a doorway into Scripture, with Jesus at the center. Read what happened, hear those who read it before us, and pray.</p>
     </div>
-    <div class="single">
-      <img src="assets/the-floor-moved.jpg" width="96" height="96" alt="The Floor Moved single cover" loading="lazy">
-      <div>
-        <p class="single-title">THE FLOOR MOVED</p>
-        <p class="single-links"><a href="#listen" data-go="listen">Play here <span aria-hidden="true">▶</span></a><a href="https://open.spotify.com/track/5FcwX0U00KvAmC18lY7q8A" rel="noopener">Spotify <span aria-hidden="true">↗</span></a><a href="https://distrokid.com/hyperfollow/theproduceroftracks/the-floor-moved" rel="noopener">All platforms <span aria-hidden="true">↗</span></a></p>
+    <ol class="hx-enc">
+      <li><a class="hx-card" href="/well/"><span class="hx-art hx-art-well" aria-hidden="true"></span><span class="hx-go" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="hx-card-text"><span class="hx-num">Track 01 · John 4</span><strong>The Well</strong><span class="hx-card-line">Jesus sits tired by a well and asks a woman for a drink.</span></span></a></li>
+      <li><a class="hx-card" href="#storm" data-room-card="storm"><span class="hx-art hx-art-storm" aria-hidden="true"></span><span class="hx-go" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="hx-card-text"><span class="hx-num">Track 02 · Matthew 14</span><strong>The Storm</strong><span class="hx-card-line">Jesus walks to them on the sea and says, Come.</span><span class="room-state" data-room-state hidden></span></span></a></li>
+      <li><a class="hx-card" href="/roof/"><span class="hx-art hx-art-roof" aria-hidden="true"></span><span class="hx-go" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="hx-card-text"><span class="hx-num">Track 03 · 2 Samuel 11–12</span><strong>The Roof</strong><span class="hx-card-line">Step onto David’s rooftop and open the sealed letter.</span></span></a></li>
+      <li><a class="hx-card" href="/blood/"><span class="hx-art hx-art-blood" aria-hidden="true"></span><span class="hx-go" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="hx-card-text"><span class="hx-num">Track 04 · Genesis 4 · Hebrews 12</span><strong>The Blood Still Speaks</strong><span class="hx-card-line">Two brothers in a field and a question God asks.</span></span></a></li>
+      <li><a class="hx-card" href="/medicine/"><span class="hx-art hx-art-medicine" aria-hidden="true"></span><span class="hx-go" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="hx-card-text"><span class="hx-num">Track 05 · John 6 · Ignatius</span><strong>Medicine of Immortality</strong><span class="hx-card-line">A locked room, a table and a bishop’s letters written in chains.</span></span></a></li>
+      <li><a class="hx-card" href="#floor" data-room-card="floor"><span class="hx-art hx-art-floor" aria-hidden="true"></span><span class="hx-go" aria-hidden="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="hx-card-text"><span class="hx-num">Track 08 · Acts 16</span><strong>The Floor Moved</strong><span class="hx-card-line">At midnight two beaten men sing, and a jailer hears, “Believe on the Lord Jesus Christ.”</span><span class="room-state" data-room-state hidden></span></span></a></li>
+    </ol>
+    <p class="hx-more"><a href="#rooms">How each encounter moves <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
+  </section>
+
+  <section class="hx-section" aria-labelledby="singles-h">
+    <div class="hx-head"><p class="hx-kicker">Singles · out now</p><h2 class="hx-h" id="singles-h">The singles.</h2></div>
+    <div class="hx-singles-row">
+      <div class="hx-single">
+        <img src="assets/bid-me-come.jpg" width="112" height="112" alt="Bid Me Come single cover: a hand grips a forearm rising out of a storm sea, engraved in cream and black" loading="lazy">
+        <div><p class="hx-single-title"><a href="/bid-me-come/">Bid Me Come</a></p>
+        <p class="hx-chips"><a class="is-primary" href="#listen">Play here <span aria-hidden="true">▶</span></a><a href="https://open.spotify.com/track/58xMKg0IJb6fF8shOg2Est" rel="noopener">Spotify <span aria-hidden="true">↗</span></a><a href="https://music.apple.com/us/album/bid-me-come-single/6826379425" rel="noopener">Apple Music <span aria-hidden="true">↗</span></a><a href="https://distrokid.com/hyperfollow/theproduceroftracks/bid-me-come" rel="noopener">All platforms <span aria-hidden="true">↗</span></a><a href="/bid-me-come/">About the song <span aria-hidden="true">→</span></a></p></div>
+      </div>
+      <div class="hx-single">
+        <img src="assets/the-floor-moved.jpg" width="112" height="112" alt="The Floor Moved single cover" loading="lazy">
+        <div><p class="hx-single-title">The Floor Moved</p>
+        <p class="hx-chips"><a class="is-primary" href="#listen">Play here <span aria-hidden="true">▶</span></a><a href="https://open.spotify.com/track/5FcwX0U00KvAmC18lY7q8A" rel="noopener">Spotify <span aria-hidden="true">↗</span></a><a href="https://distrokid.com/hyperfollow/theproduceroftracks/the-floor-moved" rel="noopener">All platforms <span aria-hidden="true">↗</span></a></p></div>
       </div>
     </div>
   </section>
@@ -496,8 +506,9 @@
   <h3 class="small-h">Contact</h3>
   <p><a href="mailto:theproduceroftracks@gmail.com">theproduceroftracks@gmail.com</a></p>
   <h3 class="small-h">Privacy</h3>
+  <p>No accounts, sign-ups, advertising, or outside analytics or tracking companies on this site.</p>
+  <details class="privacy-more"><summary>Read the full privacy notice</summary>
   <ul class="plain privacy-list">
-    <li>No accounts, sign-ups, advertising, or outside analytics or tracking companies on this site.</li>
     <li><strong>What we measure.</strong> To learn which songs and pages help people, six pages (Home, the FIND ME album page, The Well, The Roof, the Bid Me Come page and the Floor Moved 3D room) run our own measurement script. It sends records to a database in our own Cloudflare account. It records the page and the time; how long the page was on screen and how far down it was scrolled; which sections came into view; the buttons and links used, including the address of any other site a link leads to; plays, pauses, skips and how much was heard of the album and other music played on this site, and when a video’s play button is pressed; the campaign tag in the link that brought you here and the name of the website you came from; your language and screen-size category (phone, tablet or wide); page speed, errors and blocked-content reports; and that text was copied and how long it was (never the text, and no length when the copied part includes an answer you chose). With each record, Cloudflare tells us your approximate location (country, region, city and time zone) and your network operator, and we keep your device type and your browser and operating-system family, not your full browser details.</li>
     <li><strong>Listen and passage counters.</strong> The album page also counts which tracks were listened to and finished, and Home counts when the Floor Moved 3D room or the full Acts 16 or John 4 passage is opened. These use a new random number for each visit.</li>
     <li><strong>Visit IDs and notes in this browser.</strong> Each browser tab gets a random visit ID, kept with the campaign tag and referring site in that tab’s storage until the tab closes. That ID links what happens in the tab for as long as it stays open, which can be more than a day if your browser keeps or restores the tab. This browser also keeps one yes/no “been here before” note. If your browser sends Global Privacy Control or Do Not Track, that note isn’t read or kept, but the rest of the measurement above still runs. Our own test devices keep a “test” note so their visits can be set apart.</li>
@@ -511,6 +522,7 @@
     <li>The song and video players load from YouTube (in its privacy-enhanced mode) only when you press play. The Floor Moved 3D room loads its 3D software from jsDelivr when you open it. Links to Spotify, Apple Music, YouTube, DistroKid and other sites take you to services with their own privacy policies.</li>
     <li>Emailing us shares your address and message with us. It doesn’t sign you up for anything.</li>
   </ul>
+  </details>
   <h3 class="small-h">What's next</h3>
   <p><a href="/find-me/">Listen to FIND ME</a> free.</p>
   <div class="install-wrap" data-install-wrap><h3 class="small-h">On your phone</h3><button type="button" class="button" data-install>Add TPoT to your home screen</button><p class="install-note" data-install-note></p></div>
@@ -525,10 +537,10 @@
   <button type="button" class="audio-dismiss" aria-label="Dismiss">✕</button>
 </div>
 <nav class="tabbar" aria-label="Main">
-  <a href="#listen" data-go="listen" data-tab="listen"><span aria-hidden="true">▶</span>Listen</a>
-  <a href="#rooms" data-tab="rooms"><span aria-hidden="true">✦</span>Encounters</a>
-  <a href="/well/"><span aria-hidden="true">◉</span>The Well</a>
-  <a href="#about" data-go="about" data-tab="about"><span aria-hidden="true">✉</span>About</a>
+  <a href="#home" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20h-5.5v-5.5h-5V20H4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>Home</a>
+  <a href="/find-me/"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/></svg>FIND ME</a>
+  <a href="#rooms" data-tab="rooms"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l1.9 6.6 6.6 1.9-6.6 1.9-1.9 6.6-1.9-6.6L3.5 12l6.6-1.9z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Encounters</a>
+  <a href="#about" data-go="about" data-tab="about"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v5.5M12 7.6v.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>About</a>
 </nav>
 
 <div class="status-strip" data-status-strip hidden role="status"><span data-status-text></span><button type="button" class="strip-close" data-status-close aria-label="Dismiss">✕</button></div>
