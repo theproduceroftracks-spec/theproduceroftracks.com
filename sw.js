@@ -6,7 +6,7 @@
    - A new version waits until the visitor taps "Refresh" (no surprise reloads while someone is listening).
    Rollback: deploy the previous files with a NEW CACHE_VERSION, or ship a kill-switch sw.js (see README). */
 var PREFIX = 'tpot-world-';
-var CACHE_VERSION = PREFIX + 'v38-frontend-2026';
+var CACHE_VERSION = PREFIX + 'v39-encounter-bar';
 var SHELL = [
   './', './index.html', './bid-me-come/', './find-me/', './find-me/album.css', './find-me/album.js', './find-me/lyrics.js', './find-me/lyric-cues.json', './find-me/story.js', './find-me/press.js', './find-me/story.css', './styles.css', './app.js', './world.js', './manifest.webmanifest', './assets/tpot-measure.js',
   './assets/bid-me-come.jpg', './assets/the-floor-moved.jpg', './assets/find-me.jpg', './assets/find-me-cover.jpg', './assets/doorway.jpg',
@@ -14,7 +14,7 @@ var SHELL = [
   './roof/', './roof/roof.css', './roof/roof.js', './roof/roof.jpg',
   './medicine/', './medicine/medicine.css', './medicine/medicine.js',
   './blood/', './blood/blood.css', './blood/blood.js',
-  './store/', './assets/give.js', './assets/tpot-2026.css', './find-me/player.js', './find-me/player.css',
+  './store/', './assets/give.js', './assets/tpot-2026.css', './assets/tpot-encounter.css', './find-me/player.js', './find-me/player.css',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png', './icons/favicon-32.png'
 ];
 var SHELL_URLS = SHELL.map(function (p) { return new URL(p, self.registration.scope).href; });
