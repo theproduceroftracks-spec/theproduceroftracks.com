@@ -68,6 +68,21 @@
     return { room, door, niche, fish, table, hand };
   }
 
+  // dust drifting in the light from the doorway (kit v2); it settles before "You brought the table to me"
+  function dust(ctx, t, L) {
+    if (!S.started || S.still) return;
+    const a = Math.min(1, L.door) * (1 - clamp01((t - T.brought + 2) / 3));
+    if (a <= 0.01) return;
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 34; i++) {
+      const bx = 905 + (i * 151) % 225, rise = (t * (3 + (i % 4)) + i * 53) % 560, y = 740 - rise;
+      const x = bx + 14 * Math.sin(t * 0.23 + i * 1.9) + (740 - y) * 0.04 * Math.sin(i);
+      const edge = Math.min(1, rise / 80, (560 - rise) / 80), tw = 0.55 + 0.45 * Math.sin(t * 0.8 + i * 2.3);
+      ctx.fillStyle = `rgba(255,236,196,${0.42 * a * edge * tw})`;
+      ctx.beginPath(); ctx.arc(x, y, 1.3 + (i % 3) * 0.6, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  }
   S = TPoTScene.create({
     track: 5, title: 'Medicine of Immortality', audio: 'medicine-song', store: 'tpot.medicine.v1', events: 'medicine',
     size: [W, H], ground: '#0f0d0f', duration: 340.6, lastCue: [331.83, 338.76], focus: 0.42,
@@ -112,54 +127,34 @@
     ],
     // the camera: [time, move seconds, x, y, view height, min view width], in the painting's own pixels
     arrival: [0, 0, 800, 560, 1024, 1500],
+    // the camera (kit v2): mostly the whole room, so the light can move from place to place; a few closer framings
+    // (the door, the niche, the table, the hand) come and go as cross-fades, never as a zoom
     shots: T => [
-      [0.2, 10, 900, 520, 900, 1200],              // the room at night
-      [T.night - 0.5, 6, 1016, 430, 620, 520],     // the door, and the light behind it
-      [T.locked, 4, 760, 820, 560, 900],           // still I locked the door
-      [33.5, 10, 520, 640, 720, 900],
-      [T.bishop - 0.5, 3, 290, 470, 520, 440],     // the niche: chain, letter, pen
-      [T.taste, 6, 285, 540, 440, 420],
-      [T.desire, 2.5, 640, 800, 360, 520],         // the bread of God
-      [T.seed, 2, 918, 805, 320, 420],             // the cup
-      [T.closed, 2, 1220, 900, 300, 460],          // my hands have closed
-      [T.outside, 3.5, 800, 600, 1024, 1500],      // outside the feast
-      [T.finds1, 3, 1016, 470, 760, 700],          // He finds them in the dark
-      [T.hide1, 3, 760, 760, 640, 900],
-      [T.carries1, 2.5, 700, 810, 440, 600],
-      [T.opens1, 3, 1000, 560, 860, 1000],
-      [T.strange1, 3, 1300, 290, 360, 420],        // the fish and its basket of loaves
-      [T.wont1, 3, 1220, 900, 340, 480],
-      [T.adam, 6, 768, 560, 960, 1400],
-      [T.earth, 3, 600, 805, 330, 480],            // bread from the earth
-      [T.heavenly, 4, 860, 620, 760, 820],
-      [T.body, 3, 750, 815, 280, 380],             // the broken loaf
-      [T.fathers, 3, 290, 520, 520, 440],
-      [T.trembles, 3, 1060, 860, 380, 600],        // the cup draws near
-      [T.finds2, 3, 1016, 470, 760, 700],
-      [T.carries2, 3, 700, 810, 440, 600],
-      [T.opens2, 3, 1000, 560, 860, 1000],
-      [T.strange2, 3, 1300, 290, 360, 420],
-      [T.wont2, 3, 1220, 900, 340, 480],
-      [T.wont2 + 12, 5, 768, 560, 1024, 1500],
-      [T.hid, 4, 760, 560, 1024, 1536],            // I hid
-      [T.mouth, 3, 650, 810, 380, 520],
-      [T.trembleOpen, 3, 1200, 895, 300, 460],     // the hand that closed now trembles open
-      [T.approach, 4, 800, 640, 1024, 1500],
-      [T.ninety, 2.5, 1016, 480, 700, 700],        // He left the ninety-nine
-      [T.looking, 8, 900, 700, 860, 1100],         // the light comes across the floor
-      [T.looking + 14, 20, 1100, 820, 600, 800],
-      [T.flesh, 4, 1016, 470, 720, 700],
-      [T.earned, 4, 860, 700, 820, 1000],
-      [T.inHand, 3, 1100, 860, 360, 560],          // the bread is in my hand
-      [T.opensTo, 4, 1180, 890, 300, 460],         // opens to receive
-      [T.near, 8, 900, 760, 620, 900],
-      [T.found, 4, 1016, 520, 820, 900],
-      [T.gave, 3, 680, 810, 440, 600],
-      [T.opened, 4, 900, 600, 900, 1100],
-      [T.strange3, 3, 1300, 300, 420, 480],
-      [T.notFind, 4, 800, 620, 1024, 1500],
-      [T.brought, 6, 768, 512, 1024, 1536],        // You brought the table to me
-      [T.breadOfGod, 10, 768, 512, 1024, 1536]
+      [0.2, 2.2, 768, 512, 1024, 1536],             // the room at night
+      [T.night - 0.5, 2, 1000, 480, 800, 940],      // the door, and the light behind it
+      [T.locked, 2, 768, 540, 1024, 1536],          // still I locked the door
+      [T.bishop - 0.5, 2, 340, 520, 780, 800],      // the niche: chain, letter, pen
+      [T.desire, 2, 740, 770, 820, 1000],            // the bread of God, the cup
+      [T.closed, 1.8, 1130, 830, 760, 900],         // my hands have closed
+      [T.outside, 2.2, 768, 512, 1024, 1536],       // outside the feast; the chorus in the whole room
+      [T.wont1, 1.8, 1130, 830, 760, 900],          // still I won't receive
+      [T.adam, 2.2, 768, 512, 1024, 1536],
+      [T.earth, 2, 740, 770, 820, 1000],             // bread from the earth
+      [T.fathers, 2, 340, 520, 780, 800],           // I can name the fathers
+      [T.trembles, 2, 1080, 810, 780, 920],         // the cup draws near
+      [T.finds2, 2.2, 768, 512, 1024, 1536],
+      [T.wont2, 1.8, 1130, 830, 760, 900],
+      [T.wont2 + 12, 2.4, 768, 512, 1024, 1536],
+      [T.mouth, 2, 740, 770, 820, 1000],             // the mouth that wants the bread
+      [T.trembleOpen, 1.8, 1130, 830, 760, 900],    // the hand that closed now trembles open
+      [T.approach, 2.2, 768, 540, 1024, 1536],      // I cannot make myself approach the table
+      [T.ninety, 2, 1000, 480, 800, 940],           // He left the ninety-nine
+      [T.looking, 2.4, 880, 640, 1024, 1536],       // the light comes across the floor
+      [T.looking + 10, 2.2, 1100, 810, 780, 920],   // the table and the hand (the visitor may open it)
+      [T.inHand, 3, 1130, 830, 780, 920],           // the bread is in my hand
+      [T.near + 2, 2.4, 768, 512, 1024, 1536],
+      [T.gave, 2, 740, 770, 820, 1000],              // You gave me the bread that heals
+      [T.notFind, 2.4, 768, 512, 1024, 1536]        // I did not find the table; You brought the table to me
     ],
     moments: T => [[0, 'The locked door'], [T.bishop - 0.5, 'Written in chains'], [T.finds1 - 0.3, 'He finds them in the dark'], [T.ninety - 0.5, 'Open your hand'], [T.notFind - 0.3, 'The table brought to me']],
     resumeBefore: T => T.brought,
@@ -179,6 +174,7 @@
         ctx.drawImage(img[name].i, b[0], b[1], b[2] - b[0], b[3] - b[1]);
       }
       ctx.globalAlpha = 1;
+      dust(ctx, t, L);
       if (rig) {
         drawHand(ctx, t, 0.45 + 0.55 * Math.min(1, Math.max(L.hand, L.room)));
         // "You brought the table to me": the approved painting itself, whole
