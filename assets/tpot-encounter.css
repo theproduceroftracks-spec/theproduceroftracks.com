@@ -1,0 +1,69 @@
+/* The Producer of Tracks: one top bar for every encounter page (The Well, The Roof, Medicine of
+   Immortality, The Blood Still Speaks). Loaded after each page's own stylesheet. Styles only: every
+   control keeps its element, id and data hooks, so each page's own script works exactly as before.
+   Layout: back on the left · track and name in the middle · the page's own action on the right.
+   Same glass, hairline and type as the site header. No web fonts, no outside requests. */
+
+header.enc-bar {
+  --eb-text: #f1e8d6;
+  --eb-text-2: #c9bda5;
+  --eb-gold: #e6b86a;
+  --eb-hair: rgba(241, 232, 214, .12);
+  --eb-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --eb-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  position: sticky; top: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px;
+  width: 100%; min-height: calc(58px + env(safe-area-inset-top)); margin: 0;
+  padding: env(safe-area-inset-top) max(clamp(14px, 4vw, 40px), env(safe-area-inset-right)) 0 max(clamp(14px, 4vw, 40px), env(safe-area-inset-left));
+  background: rgba(14, 13, 11, .74);
+  -webkit-backdrop-filter: saturate(140%) blur(18px); backdrop-filter: saturate(140%) blur(18px);
+  border: 0; border-bottom: 1px solid var(--eb-hair);
+  color: var(--eb-text); font: 600 14px/1.2 var(--eb-ui); letter-spacing: 0; text-transform: none;
+}
+
+/* left: the way back */
+header.enc-bar .enc-left {
+  grid-column: 1; justify-self: start; min-width: 0; max-width: 100%;
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 2px;
+  font: 600 14px/1.2 var(--eb-ui); letter-spacing: 0; text-transform: none; text-decoration: none;
+  color: var(--eb-text); background: none; border: 0; white-space: nowrap;
+}
+header.enc-bar .enc-left > span:last-child { overflow: hidden; text-overflow: ellipsis; }
+header.enc-bar .enc-left [aria-hidden="true"] { color: var(--eb-gold); flex: none; }
+header.enc-bar .enc-left:hover { color: #fff; }
+/* The Well: at the water there is no step to go back to, so the bar offers the encounters instead */
+header.enc-bar .step-back:not([hidden]) ~ .enc-up { display: none; }
+
+/* middle: which song this is */
+header.enc-bar .enc-mid {
+  grid-column: 2; justify-self: center; display: grid; justify-items: center; gap: 3px; min-width: 0; max-width: 46vw;
+  min-height: 44px; align-content: center; padding: 0 4px; text-align: center; text-decoration: none; color: var(--eb-text);
+  background: none; border: 0; letter-spacing: 0; text-transform: none; white-space: normal;
+}
+header.enc-bar .enc-kicker { font: 600 10.5px/1 var(--eb-ui); letter-spacing: .18em; text-transform: uppercase; color: var(--eb-gold); }
+header.enc-bar .enc-name { font: 400 16px/1.15 var(--eb-serif); letter-spacing: .005em; color: var(--eb-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+header.enc-bar a.enc-mid:hover .enc-name { color: #fff; }
+
+/* right: this page's own action (album, sound, read as text) */
+header.enc-bar .enc-right {
+  grid-column: 3; justify-self: end; display: inline-flex; align-items: center; gap: 8px;
+  min-height: 40px; min-width: 40px; padding: 0 14px; margin: 0; border-radius: 999px;
+  border: 1px solid rgba(241, 232, 214, .22); background: rgba(241, 232, 214, .04); color: var(--eb-text);
+  font: 600 13px/1 var(--eb-ui); letter-spacing: 0; text-transform: none; text-decoration: none; white-space: nowrap; cursor: pointer;
+}
+header.enc-bar .enc-right:hover { background: rgba(241, 232, 214, .1); }
+header.enc-bar .enc-right svg { width: 16px; height: 16px; flex: none; color: var(--eb-gold); }
+header.enc-bar .enc-right[aria-pressed="true"] { border-color: rgba(230, 184, 106, .6); background: rgba(230, 184, 106, .12); }
+header.enc-bar :focus-visible { outline: 2px solid var(--eb-gold); outline-offset: 3px; border-radius: 6px; }
+
+/* phones: the action keeps its name for screen readers and shows as an icon */
+@media (max-width: 520px) {
+  header.enc-bar { gap: 6px; }
+  header.enc-bar .enc-right { padding: 0; width: 40px; justify-content: center; }
+  header.enc-bar .enc-right .enc-label {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+  header.enc-bar .enc-name { font-size: 15px; }
+  header.enc-bar .enc-left { font-size: 13.5px; }
+}
+@media (max-width: 360px) { header.enc-bar .enc-kicker { letter-spacing: .12em; } }
