@@ -6,11 +6,13 @@
    - A new version waits until the visitor taps "Refresh" (no surprise reloads while someone is listening).
    Rollback: deploy the previous files with a NEW CACHE_VERSION, or ship a kill-switch sw.js (see README). */
 var PREFIX = 'tpot-world-';
-var CACHE_VERSION = PREFIX + 'v39-encounter-bar';
+var CACHE_VERSION = PREFIX + 'v41-well-search';
 var SHELL = [
   './', './index.html', './bid-me-come/', './find-me/', './find-me/album.css', './find-me/album.js', './find-me/lyrics.js', './find-me/lyric-cues.json', './find-me/story.js', './find-me/press.js', './find-me/story.css', './styles.css', './app.js', './world.js', './manifest.webmanifest', './assets/tpot-measure.js',
   './assets/bid-me-come.jpg', './assets/the-floor-moved.jpg', './assets/find-me.jpg', './assets/find-me-cover.jpg', './assets/doorway.jpg',
-  './well/', './well/well.css', './well/well.js', './well/assets/the-well.jpg', './well/assets/icon-192.png',
+  './well/', './well/well.css', './well/well.js', './well/scene.js', './well/assets/the-well.jpg', './well/assets/icon-192.png',
+  './well/scene/back.jpg', './well/scene/water.jpg', './well/scene/jar.webp', './well/scene/jesus-rest.webp', './well/scene/jesus-speak.webp',
+  './well/scene/woman-walk.webp', './well/scene/woman-stand.webp', './well/scene/woman-empty.webp', './well/scene/woman-go.webp', './well/scene/people.webp',
   './roof/', './roof/roof.css', './roof/roof.js', './roof/roof.jpg',
   './medicine/', './medicine/medicine.css', './medicine/medicine.js',
   './blood/', './blood/blood.css', './blood/blood.js',
