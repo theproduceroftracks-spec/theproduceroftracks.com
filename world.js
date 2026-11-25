@@ -108,17 +108,21 @@
 
   /* ---------- continue card (Home) ---------- */
   function hrefFor(route, pos) { return route === 'well' ? '#well-' + pos : '#' + route; }
+  /* Encounters with their own page (The Well at /well/) record their place themselves: an href on this site and a short label. */
+  function pageHref(h) { return typeof h === 'string' && /^\/[a-z-]+\/(#[a-z-]+)?$/.test(h) ? h : null; }
+  function pagePlace(p) { return typeof p === 'string' && p.length <= 60 && /^[A-Za-z ,’'.-]+$/.test(p) ? p : null; }
   function renderContinue() {
     var box = $('[data-continue]'); if (!box) return;
     var L = state.last;
     if (!storageOK || !L || !ROOMS[L.route]) { box.hidden = true; return; }
-    var label = placeLabel(L.route, L.pos);
+    var own = pagePlace(L.place);
+    var label = own || placeLabel(L.route, L.pos);
     box.hidden = false;
     var a = $('a', box);
-    a.setAttribute('href', hrefFor(L.route, L.pos));
+    a.setAttribute('href', pageHref(L.href) || hrefFor(L.route, L.pos));
     a.dataset.route = L.route; a.dataset.pos = L.pos;
     $('[data-continue-title]', box).textContent = ROOMS[L.route].title;
-    $('[data-continue-place]', box).textContent = label ? (L.pos > 1 ? label : 'Begin again: ' + label) : '';
+    $('[data-continue-place]', box).textContent = label ? (own || L.pos > 1 ? label : 'Begin again: ' + label) : '';
     box.dataset.room = L.route;
   }
   document.addEventListener('click', function (e) {

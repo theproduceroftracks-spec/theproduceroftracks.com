@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://theproduceroftracks.com/</loc></url>
-  <url><loc>https://theproduceroftracks.com/bid-me-come/</loc></url>
-  <url><loc>https://theproduceroftracks.com/find-me/</loc></url>
-  <url><loc>https://theproduceroftracks.com/roof/</loc></url>
-  <url><loc>https://theproduceroftracks.com/medicine/</loc></url>
-  <url><loc>https://theproduceroftracks.com/blood/</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url><loc>https://theproduceroftracks.com/</loc><lastmod>2026-11-24</lastmod><image:image><image:loc>https://theproduceroftracks.com/assets/find-me-cover.jpg</image:loc></image:image></url>
+  <url><loc>https://theproduceroftracks.com/find-me/</loc><lastmod>2026-11-24</lastmod><image:image><image:loc>https://theproduceroftracks.com/assets/find-me-cover.jpg</image:loc></image:image></url>
+  <url><loc>https://theproduceroftracks.com/bid-me-come/</loc><lastmod>2026-11-24</lastmod><image:image><image:loc>https://theproduceroftracks.com/assets/bid-me-come.jpg</image:loc></image:image></url>
+  <url><loc>https://theproduceroftracks.com/roof/</loc><lastmod>2026-11-24</lastmod><image:image><image:loc>https://theproduceroftracks.com/roof/roof.jpg</image:loc></image:image></url>
+  <url><loc>https://theproduceroftracks.com/medicine/</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://theproduceroftracks.com/blood/</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://theproduceroftracks.com/room/the-floor-moved.html</loc><lastmod>2026-11-24</lastmod></url>
 </urlset>
