@@ -235,7 +235,9 @@
       const fh = Math.max(ch, refH || ch);
       if (!cw || !fh) return vh;
       const aspect = cw / fh;
-      return Math.min(Math.max(vh, minW / aspect), H, W / aspect);
+      // on a tall screen (a phone) a framing needs less of its width: the people come closer instead of shrinking
+      const need = aspect < 1.1 ? 0.7 : 1;
+      return Math.min(Math.max(vh, need * minW / aspect), H, W / aspect);
     }
     // for each framing on this screen: how the camera gets there and the size it then holds (a glide keeps its size)
     let planned = null, plannedFor = '';
