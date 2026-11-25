@@ -1,0 +1,260 @@
+{
+ "figure": "hand",
+ "px": 0.5,
+ "root": "sleeve",
+ "ground": [
+  54,
+  51
+ ],
+ "place": [
+  1290,
+  914
+ ],
+ "parts": {
+  "sleeve": {
+   "file": "hand-sleeve.webp",
+   "size": [
+    507,
+    232
+   ],
+   "pivot": [
+    54,
+    51
+   ],
+   "parent": null,
+   "z": 0
+  },
+  "palm": {
+   "file": "hand-palm.webp",
+   "size": [
+    292,
+    169
+   ],
+   "pivot": [
+    257,
+    104
+   ],
+   "parent": "sleeve",
+   "at": [
+    54,
+    51
+   ],
+   "z": 1
+  },
+  "f1a": {
+   "file": "hand-f1a.webp",
+   "size": [
+    135,
+    61
+   ],
+   "pivot": [
+    113,
+    33
+   ],
+   "parent": "palm",
+   "at": [
+    31,
+    55
+   ],
+   "z": 8
+  },
+  "f1b": {
+   "file": "hand-f1b.webp",
+   "size": [
+    127,
+    62
+   ],
+   "pivot": [
+    105,
+    26
+   ],
+   "parent": "f1a",
+   "at": [
+    29,
+    29
+   ],
+   "z": 9
+  },
+  "f2a": {
+   "file": "hand-f2a.webp",
+   "size": [
+    140,
+    53
+   ],
+   "pivot": [
+    122,
+    29
+   ],
+   "parent": "palm",
+   "at": [
+    31,
+    77
+   ],
+   "z": 6
+  },
+  "f2b": {
+   "file": "hand-f2b.webp",
+   "size": [
+    121,
+    54
+   ],
+   "pivot": [
+    104,
+    23
+   ],
+   "parent": "f2a",
+   "at": [
+    24,
+    24
+   ],
+   "z": 7
+  },
+  "f3a": {
+   "file": "hand-f3a.webp",
+   "size": [
+    114,
+    49
+   ],
+   "pivot": [
+    97,
+    26
+   ],
+   "parent": "palm",
+   "at": [
+    31,
+    90
+   ],
+   "z": 4
+  },
+  "f3b": {
+   "file": "hand-f3b.webp",
+   "size": [
+    104,
+    44
+   ],
+   "pivot": [
+    88,
+    22
+   ],
+   "parent": "f3a",
+   "at": [
+    23,
+    23
+   ],
+   "z": 5
+  },
+  "f4a": {
+   "file": "hand-f4a.webp",
+   "size": [
+    101,
+    48
+   ],
+   "pivot": [
+    83,
+    25
+   ],
+   "parent": "palm",
+   "at": [
+    31,
+    103
+   ],
+   "z": 2
+  },
+  "f4b": {
+   "file": "hand-f4b.webp",
+   "size": [
+    81,
+    43
+   ],
+   "pivot": [
+    67,
+    23
+   ],
+   "parent": "f4a",
+   "at": [
+    21,
+    21
+   ],
+   "z": 3
+  },
+  "thumb": {
+   "file": "hand-thumb.webp",
+   "size": [
+    241,
+    215
+   ],
+   "pivot": [
+    201,
+    106
+   ],
+   "parent": "palm",
+   "at": [
+    157,
+    40
+   ],
+   "z": 10
+  }
+ },
+ "poses": {
+  "closed": {
+   "sleeve": 0,
+   "palm": -2,
+   "thumb": -16,
+   "f1a": 84,
+   "f1b": 124,
+   "f2a": 88,
+   "f2b": 130,
+   "f3a": 92,
+   "f3b": 134,
+   "f4a": 96,
+   "f4b": 134,
+   "_x": 0,
+   "_y": 0
+  },
+  "tremble": {
+   "sleeve": 0,
+   "palm": -1.5,
+   "thumb": -13,
+   "f1a": 70,
+   "f1b": 106,
+   "f2a": 75,
+   "f2b": 112,
+   "f3a": 80,
+   "f3b": 117,
+   "f4a": 85,
+   "f4b": 118,
+   "_x": 0,
+   "_y": 0
+  },
+  "half": {
+   "sleeve": 0,
+   "palm": -1,
+   "thumb": -7,
+   "f1a": 28,
+   "f1b": 56,
+   "f2a": 34,
+   "f2b": 60,
+   "f3a": 41,
+   "f3b": 65,
+   "f4a": 48,
+   "f4b": 68,
+   "_x": 0,
+   "_y": 0
+  },
+  "open": {
+   "sleeve": 0,
+   "palm": 0,
+   "thumb": 0,
+   "f1a": 0,
+   "f1b": 0,
+   "f2a": 0,
+   "f2b": 0,
+   "f3a": 0,
+   "f3b": 0,
+   "f4a": 0,
+   "f4b": 0,
+   "_x": 0,
+   "_y": 0
+  }
+ }
+}
