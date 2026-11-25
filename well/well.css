@@ -351,3 +351,10 @@ body:has(.song-mini:not([hidden])) .page { padding-bottom: 104px; }
 @media (prefers-reduced-motion: reduce) {
   .line-now.is-new, .song-note, .jar-ask { animation: none; }
 }
+
+/* the end of the song leads on: pray, or go to the next encounter (Nov 25, 2026) */
+.song-end:not([hidden]) { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.song-next { display: inline-flex; align-items: baseline; gap: .5em; padding: 11px 16px; border: 1px solid rgba(232, 211, 165, .45);
+  border-radius: 999px; color: #f3e6c8; text-decoration: none; line-height: 1.2; }
+.song-next small { font-size: .7em; letter-spacing: .14em; text-transform: uppercase; opacity: .72; }
+.song-next:hover, .song-next:focus-visible { border-color: #e8d3a5; }

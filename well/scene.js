@@ -221,6 +221,12 @@
         ctx.fillText(label, lx, ly + 8); ctx.restore();
       }
     }
+    // one object from today (engine/objects.py): she left both. A phone lies face-down beside her jar.
+    if (jarAt && t >= jarAt.t && S.ok('phone')) {
+      const R = S.rig('woman'), J = R.parts.jar, bx = jarAt.to[0] + R.px * (J.size[0] / 2 - J.pivot[0]);
+      ctx.globalAlpha = S.still ? 1 : clamp01((t - jarAt.t) / 0.8);
+      ctx.drawImage(S.img.phone.i, bx - 46, STAND[1] - 1, 30, 10); ctx.globalAlpha = 1;
+    }
     for (const p of townFigures(t)) if (p.a > 0.002) S.drawRig(ctx, p.n, p.pose, p.x, p.y, { scale: p.s, alpha: p.a, light: sun, shadow: [50 * p.s, 11 * p.s, 0.38] });
   }
   const JESUS_FEET = () => { const f = S.rig('jesus').sprite_feet || [135, 380]; return [BOX.jesus[0] + f[0], BOX.jesus[1] + f[1]]; };
@@ -414,7 +420,8 @@
     track: 1, title: 'Same Well, Same Thirst', audio: 'well-song', store: 'tpot.well.v2', events: 'well',
     size: [W, H], ground: '#141612', duration: 315.5, lastCue: [300.52, 306.24],
     files: { back: 'back.jpg', water: 'water.jpg', jar: 'jar.webp', jesusRest: 'jesus-rest.webp', jesusSpeak: 'jesus-speak.webp',
-      walk: 'woman-walk.webp', stand: 'woman-stand.webp', empty: 'woman-empty.webp', go: 'woman-go.webp', people: 'people.webp' },
+      walk: 'woman-walk.webp', stand: 'woman-stand.webp', empty: 'woman-empty.webp', go: 'woman-go.webp', people: 'people.webp',
+      phone: 'phone-down.webp' },
     first: ['back', 'jesusRest'],
     // each moment, found by its words in the album's lyric timings (with the time to use if a line can't be found)
     lines: {
@@ -484,7 +491,7 @@
     },
     preload(t) {
       if (t > T.v1 - 8 && t < T.sat) S.load('water');
-      if (S.started) { S.load('walk'); S.load('stand'); S.load('jesusSpeak'); if (t > 150) { S.load('empty'); S.load('jar'); S.load('go'); S.load('people'); } }
+      if (S.started) { S.load('walk'); S.load('stand'); S.load('jesusSpeak'); if (t > 150) { S.load('empty'); S.load('jar'); S.load('go'); S.load('people'); S.load('phone'); } }
     },
     // the jar: the one thing the visitor does (never before she has reached the well)
     act: { key: 'jar', min: 30.5, auto: T => T.auto, load: ['empty', 'jar', 'go'] },
