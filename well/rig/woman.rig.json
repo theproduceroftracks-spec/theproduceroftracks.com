@@ -59,7 +59,8 @@
    "z": 10,
    "faces": {
     "down": "woman-head-down.webp",
-    "up": "woman-head-up.webp"
+    "up": "woman-head-up.webp",
+    "blink": "woman-head-blink.webp"
    }
   },
   "veil": {

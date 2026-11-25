@@ -42,7 +42,8 @@
    "z": 4,
    "faces": {
     "speak": "jesus-head-speak.webp",
-    "listen": "jesus-head-listen.webp"
+    "listen": "jesus-head-listen.webp",
+    "blink": "jesus-head-blink.webp"
    }
   },
   "armR_upper": {
