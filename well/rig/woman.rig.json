@@ -1,0 +1,421 @@
+{
+ "figure": "woman",
+ "px": 0.5,
+ "root": "skirt",
+ "ground": [
+  140,
+  529
+ ],
+ "sprite_feet": [
+  124,
+  405
+ ],
+ "parts": {
+  "skirt": {
+   "file": "woman-skirt.webp",
+   "size": [
+    285,
+    533
+   ],
+   "pivot": [
+    140,
+    529
+   ],
+   "parent": null,
+   "z": 3
+  },
+  "torso": {
+   "file": "woman-torso.webp",
+   "size": [
+    171,
+    261
+   ],
+   "pivot": [
+    83,
+    183
+   ],
+   "parent": "skirt",
+   "at": [
+    146,
+    75
+   ],
+   "z": 6
+  },
+  "head": {
+   "file": "woman-head.webp",
+   "size": [
+    137,
+    178
+   ],
+   "pivot": [
+    59,
+    143
+   ],
+   "parent": "torso",
+   "at": [
+    83,
+    19
+   ],
+   "z": 10,
+   "faces": {
+    "down": "woman-head-down.webp",
+    "up": "woman-head-up.webp"
+   }
+  },
+  "veil": {
+   "file": "woman-veil.webp",
+   "size": [
+    160,
+    397
+   ],
+   "pivot": [
+    89,
+    127
+   ],
+   "parent": "head",
+   "at": [
+    89,
+    127
+   ],
+   "z": 0
+  },
+  "armR_upper": {
+   "file": "woman-armR_upper.webp",
+   "size": [
+    73,
+    135
+   ],
+   "pivot": [
+    49,
+    24
+   ],
+   "parent": "torso",
+   "at": [
+    41,
+    51
+   ],
+   "z": 8
+  },
+  "armR_fore": {
+   "file": "woman-armR_fore.webp",
+   "size": [
+    81,
+    153
+   ],
+   "pivot": [
+    38,
+    23
+   ],
+   "parent": "armR_upper",
+   "at": [
+    23,
+    112
+   ],
+   "z": 9,
+   "faces": {
+    "grip": "woman-armR_fore-grip.webp"
+   }
+  },
+  "armL_upper": {
+   "file": "woman-armL_upper.webp",
+   "size": [
+    65,
+    135
+   ],
+   "pivot": [
+    24,
+    24
+   ],
+   "parent": "torso",
+   "at": [
+    137,
+    51
+   ],
+   "z": 4
+  },
+  "armL_fore": {
+   "file": "woman-armL_fore.webp",
+   "size": [
+    77,
+    153
+   ],
+   "pivot": [
+    54,
+    23
+   ],
+   "parent": "armL_upper",
+   "at": [
+    42,
+    112
+   ],
+   "z": 5,
+   "faces": {
+    "grip": "woman-armL_fore-grip.webp"
+   }
+  },
+  "footL": {
+   "file": "woman-footL.webp",
+   "size": [
+    80,
+    372
+   ],
+   "pivot": [
+    51,
+    25
+   ],
+   "parent": "skirt",
+   "at": [
+    176,
+    191
+   ],
+   "z": 1
+  },
+  "footR": {
+   "file": "woman-footR.webp",
+   "size": [
+    80,
+    372
+   ],
+   "pivot": [
+    51,
+    25
+   ],
+   "parent": "skirt",
+   "at": [
+    88,
+    191
+   ],
+   "z": 2
+  },
+  "jar": {
+   "file": "woman-jar.webp",
+   "size": [
+    172,
+    220
+   ],
+   "pivot": [
+    30,
+    106
+   ],
+   "parent": "armR_fore",
+   "at": [
+    50,
+    113
+   ],
+   "z": 7
+  }
+ },
+ "poses": {
+  "stand_jar": {
+   "_face": {
+    "armR_fore": "grip",
+    "armL_fore": "grip"
+   }
+  },
+  "stand": {
+   "armR_upper": 2,
+   "armR_fore": 6,
+   "armL_upper": -2,
+   "armL_fore": -6
+  },
+  "reach": {
+   "torso": -45,
+   "head": 14,
+   "veil": 10,
+   "armR_upper": 47,
+   "armR_fore": -6,
+   "armL_upper": 45,
+   "armL_fore": -4,
+   "jar": 4,
+   "footR": 12,
+   "footL": -12,
+   "_y": 7.39,
+   "_face": {
+    "head": "down",
+    "armR_fore": "grip",
+    "armL_fore": "grip"
+   }
+  },
+  "turn": {
+   "torso": -3,
+   "head": 8,
+   "veil": 6,
+   "armR_upper": 8,
+   "armR_fore": 14,
+   "armL_upper": -8,
+   "armL_fore": -12,
+   "footR": 4,
+   "footL": -3,
+   "_y": 0.82,
+   "_face": {
+    "head": "down"
+   }
+  },
+  "call": {
+   "torso": -5,
+   "head": -10,
+   "veil": -12,
+   "armR_upper": 125,
+   "armR_fore": 25,
+   "armL_upper": -24,
+   "armL_fore": 18,
+   "footR": 8,
+   "footL": -8,
+   "_y": 3.29,
+   "_face": {
+    "head": "up"
+   }
+  }
+ },
+ "cycles": {
+  "walk_jar": {
+   "stride": 58.92,
+   "keys": [
+    {
+     "footR": 5,
+     "footL": -5,
+     "torso": 0.2,
+     "head": -1,
+     "veil": -2,
+     "armR_upper": -1.5,
+     "jar": 1.5,
+     "_y": 1.29,
+     "_face": {
+      "armR_fore": "grip",
+      "armL_fore": "grip"
+     }
+    },
+    {
+     "torso": -1,
+     "_y": 0,
+     "_face": {
+      "armR_fore": "grip",
+      "armL_fore": "grip"
+     }
+    },
+    {
+     "footR": -5,
+     "footL": 5,
+     "torso": -2.2,
+     "head": 1,
+     "veil": 2,
+     "armR_upper": 1.5,
+     "jar": -1.5,
+     "_y": 1.29,
+     "_face": {
+      "armR_fore": "grip",
+      "armL_fore": "grip"
+     }
+    },
+    {
+     "torso": -1,
+     "_y": 0,
+     "_face": {
+      "armR_fore": "grip",
+      "armL_fore": "grip"
+     }
+    }
+   ]
+  },
+  "walk": {
+   "stride": 82.38,
+   "keys": [
+    {
+     "footR": 7,
+     "footL": -7,
+     "armR_upper": -14,
+     "armR_fore": 2,
+     "armL_upper": 12,
+     "armL_fore": 4,
+     "torso": -1,
+     "head": -1,
+     "veil": -3,
+     "_y": 2.52
+    },
+    {
+     "veil": 2,
+     "torso": -2,
+     "armR_fore": 6,
+     "armL_fore": -4,
+     "_y": 0
+    },
+    {
+     "footR": -7,
+     "footL": 7,
+     "armR_upper": 14,
+     "armR_fore": 10,
+     "armL_upper": -12,
+     "armL_fore": -12,
+     "torso": -3,
+     "head": 1,
+     "veil": 3,
+     "_y": 2.52
+    },
+    {
+     "veil": 2,
+     "torso": -2,
+     "armR_fore": 6,
+     "armL_fore": -4,
+     "_y": 0
+    }
+   ]
+  },
+  "run": {
+   "stride": 174.96,
+   "keys": [
+    {
+     "footR": 15,
+     "footL": -15,
+     "armR_upper": -36,
+     "armR_fore": 60,
+     "armL_upper": 34,
+     "armL_fore": 40,
+     "head": -6,
+     "veil": -20,
+     "torso": -10,
+     "_y": 11.52,
+     "_face": {
+      "head": "up"
+     }
+    },
+    {
+     "veil": -10,
+     "torso": -12,
+     "head": -4,
+     "armR_fore": 40,
+     "armL_fore": 10,
+     "_y": -6,
+     "_face": {
+      "head": "up"
+     }
+    },
+    {
+     "footR": -15,
+     "footL": 15,
+     "armR_upper": 36,
+     "armR_fore": 20,
+     "armL_upper": -34,
+     "armL_fore": -20,
+     "head": -2,
+     "veil": -8,
+     "torso": -14,
+     "_y": 11.52,
+     "_face": {
+      "head": "up"
+     }
+    },
+    {
+     "veil": -10,
+     "torso": -12,
+     "head": -4,
+     "armR_fore": 40,
+     "armL_fore": 10,
+     "_y": -6,
+     "_face": {
+      "head": "up"
+     }
+    }
+   ]
+  }
+ }
+}

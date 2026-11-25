@@ -1,0 +1,126 @@
+{
+ "figure": "jesus",
+ "px": 0.5,
+ "root": "body",
+ "ground": [
+  294,
+  554
+ ],
+ "sprite_feet": [
+  219,
+  377
+ ],
+ "parts": {
+  "body": {
+   "file": "jesus-body.webp",
+   "size": [
+    369,
+    563
+   ],
+   "pivot": [
+    294,
+    554
+   ],
+   "parent": null,
+   "z": 0
+  },
+  "head": {
+   "file": "jesus-head.webp",
+   "size": [
+    232,
+    246
+   ],
+   "pivot": [
+    108,
+    182
+   ],
+   "parent": "body",
+   "at": [
+    88,
+    8
+   ],
+   "z": 4,
+   "faces": {
+    "speak": "jesus-head-speak.webp",
+    "listen": "jesus-head-listen.webp"
+   }
+  },
+  "armR_upper": {
+   "file": "jesus-armR_upper.webp",
+   "size": [
+    95,
+    177
+   ],
+   "pivot": [
+    29,
+    29
+   ],
+   "parent": "body",
+   "at": [
+    152,
+    42
+   ],
+   "z": 2
+  },
+  "armR_fore": {
+   "file": "jesus-armR_fore.webp",
+   "size": [
+    151,
+    202
+   ],
+   "pivot": [
+    30,
+    30
+   ],
+   "parent": "armR_upper",
+   "at": [
+    65,
+    147
+   ],
+   "z": 3,
+   "faces": {
+    "bless": "jesus-armR_fore-bless.webp"
+   }
+  },
+  "armL": {
+   "file": "jesus-armL.webp",
+   "size": [
+    107,
+    100
+   ],
+   "pivot": [
+    25,
+    25
+   ],
+   "parent": "body",
+   "at": [
+    68,
+    240
+   ],
+   "z": 1
+  }
+ },
+ "poses": {
+  "rest": {
+   "head": 7
+  },
+  "speak": {
+   "head": -2,
+   "armR_upper": -27,
+   "armR_fore": -98.92,
+   "_face": {
+    "head": "speak",
+    "armR_fore": "bless"
+   }
+  },
+  "listen": {
+   "head": -9,
+   "armR_fore": -4,
+   "armL": -3,
+   "_face": {
+    "head": "listen"
+   }
+  }
+ },
+ "cycles": {}
+}

@@ -1,0 +1,147 @@
+{
+ "figure": "person_a",
+ "px": 0.5,
+ "root": "body",
+ "ground": [
+  53,
+  249
+ ],
+ "sprite_feet": [
+  43,
+  160.5
+ ],
+ "parts": {
+  "body": {
+   "file": "person_a-body.webp",
+   "size": [
+    107,
+    253
+   ],
+   "pivot": [
+    53,
+    249
+   ],
+   "parent": null,
+   "z": 3
+  },
+  "head": {
+   "file": "person_a-head.webp",
+   "size": [
+    67,
+    102
+   ],
+   "pivot": [
+    23,
+    51
+   ],
+   "parent": "body",
+   "at": [
+    50,
+    26
+   ],
+   "z": 4
+  },
+  "armR": {
+   "file": "person_a-armR.webp",
+   "size": [
+    44,
+    115
+   ],
+   "pivot": [
+    27,
+    16
+   ],
+   "parent": "body",
+   "at": [
+    33,
+    58
+   ],
+   "z": 5
+  },
+  "armL": {
+   "file": "person_a-armL.webp",
+   "size": [
+    42,
+    115
+   ],
+   "pivot": [
+    17,
+    16
+   ],
+   "parent": "body",
+   "at": [
+    71,
+    58
+   ],
+   "z": 0
+  },
+  "footR": {
+   "file": "person_a-footR.webp",
+   "size": [
+    49,
+    133
+   ],
+   "pivot": [
+    28,
+    14.6
+   ],
+   "parent": "body",
+   "at": [
+    41,
+    137.6
+   ],
+   "z": 2
+  },
+  "footL": {
+   "file": "person_a-footL.webp",
+   "size": [
+    49,
+    133
+   ],
+   "pivot": [
+    28,
+    14.6
+   ],
+   "parent": "body",
+   "at": [
+    65,
+    137.6
+   ],
+   "z": 1
+  }
+ },
+ "poses": {
+  "rest": {}
+ },
+ "cycles": {
+  "walk": {
+   "stride": 53.9,
+   "keys": [
+    {
+     "footR": 14,
+     "footL": -14,
+     "armR": -18,
+     "armL": 18,
+     "head": -2.5,
+     "_y": 3.31
+    },
+    {
+     "head": -1,
+     "_y": 0
+    },
+    {
+     "footR": -14,
+     "footL": 14,
+     "armR": 18,
+     "armL": -18,
+     "head": 0.5,
+     "_y": 3.31
+    },
+    {
+     "head": -1,
+     "_y": 0
+    }
+   ]
+  }
+ }
+}
