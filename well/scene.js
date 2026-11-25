@@ -22,6 +22,14 @@
   const ROAD_OUT = [STAND, [1770, 1060], [1850, 995], [1960, 930], [2080, 860], [2200, 776], [2272, 712]];
   const depth = y => clamp01((y - 670) / (STAND[1] - 670));       // nearer the horizon, smaller
   function jarTime() { return S.actAt != null ? S.actAt : T.auto; }
+  function herAt(t) {                                                            // where she is on the road (the camera follows)
+    const jd = jarTime(), goStart = Math.max(jd + 1.6, T.auto + 1.2);
+    if (t < 30) return along(ROAD_IN, clamp01((t - (T.first + 1)) / (30 - (T.first + 1))));
+    if (t < goStart) return STAND;
+    if (t < goStart + 15) return along(ROAD_OUT, clamp01((t - goStart) / 15));
+    if (t < T.waiting) return ROAD_OUT[ROAD_OUT.length - 1];
+    return along([[2272, 712], [2200, 776], [2080, 860], [1990, 920], [1900, 985]], clamp01((t - T.waiting) / 38));
+  }
   function cast(t) {
     const out = [], still = S.still, started = S.started;
     const bob = (phase, s) => still ? 0 : -Math.abs(Math.sin(phase)) * 5 * s;
@@ -106,6 +114,16 @@
   const add = (p, extra) => { const o = Object.assign({}, p); for (const [k, v] of Object.entries(extra)) o[k] = typeof v === 'number' ? (o[k] || 0) + v : v; return o; };
   const only = (p, parts) => Object.fromEntries(Object.entries(p).filter(([k]) => parts.includes(k)));
   const ARM_R = ['armR_upper', 'armR_fore'];
+  // a blink every few seconds, at its own unhurried rhythm for each person (the same moment every time the song plays)
+  function blinking(t, seed) {
+    if (S.still || !S.started) return false;
+    const n = Math.floor((t + seed) / 4.3), r = Math.abs(Math.sin(n * 12.9898 + seed * 78.233) * 43758.5453) % 1;
+    const at = n * 4.3 - seed + 0.6 + r * 2.6;
+    return t >= at && t < at + 0.14;
+  }
+  const blinkFace = (p, on) => on ? Object.assign({}, p, { _face: Object.assign({}, p._face || {}, { head: 'blink' }) }) : p;
+  // the sun is high and to the right: a warm side, a cooler far side, and a soft shadow on the ground
+  const SUN = t => { const L = light(t); return { dir: [-0.62, 0.78], warm: `255,212,146,${0.26 + 0.2 * L.warm}`, shade: `34,24,52,${0.44 - 0.14 * L.spring}` }; };
   function jesusPose(t) {
     if (!S.started) return add(pose('jesus', 'rest'), S.still ? {} : { body: 0.5 * Math.sin(t * 1.4), head: 1.2 * Math.sin(t * 0.6) });
     const k = [[0, pose('jesus', 'rest')], [28, pose('jesus', 'listen'), 1.6]];
@@ -116,7 +134,7 @@
       const sp = speakMix(t);                                                     // breathing; the hand moves as He speaks
       p = add(p, { body: 0.5 * Math.sin(t * 1.4), head: 1.2 * Math.sin(t * 0.6 + 1), armR_fore: sp * 5 * Math.sin(t * 2.6) });
     }
-    return p;
+    return blinkFace(p, blinking(t, 1.7));
   }
   function face(t) {
     if (t >= T.smallest && t < T.mountain) return 'down';                        // the smallest truth
@@ -127,8 +145,11 @@
   let jarAt = null;                                                              // where her hands left the jar (world)
   function womanFigure(t) {
     if (!S.started || t < T.first + 1) return null;
-    const still = S.still, jd = jarTime(), goStart = Math.max(jd + 1.6, T.auto + 1.2), sway = still ? {} : { veil: 2.5 * Math.sin(t * 1.3), torso: 0.6 * Math.sin(t * 1.5) };
-    const withFace = p => { const f = face(t); return f ? Object.assign({}, p, { _face: Object.assign({}, p._face || {}, { head: f }) }) : p; };
+    const still = S.still, jd = jarTime(), goStart = Math.max(jd + 1.6, T.auto + 1.2);
+    // her mantle trails behind as she moves, and settles when she stops; standing, her weight shifts slowly
+    const [hx0] = herAt(t - 0.3), [hx1] = herAt(t), trail = still ? 0 : Math.max(-9, Math.min(9, (hx1 - hx0) / 0.3 * 0.14));
+    const sway = still ? {} : { veil: 2.5 * Math.sin(t * 1.3) + trail, torso: 0.6 * Math.sin(t * 1.5) + 0.8 * Math.sin(t * 0.47 + 1), _x: 5 * Math.sin(t * 0.47) };
+    const withFace = p => { const f = blinking(t, 0.4) ? 'blink' : face(t); return f ? Object.assign({}, p, { _face: Object.assign({}, p._face || {}, { head: f }) }) : p; };
     // the jar leaves her hands at the bottom of her reach and is set on the ground, upright
     const keepJar = p => jarAt && t >= jarAt.t ? Object.assign({}, p, { _detach: { jar: jarAt.from.map((v, i) => lerp(v, jarAt.to[i], still ? 1 : ease(clamp01((t - jarAt.t) / 0.35)))) } }) : p;
     if (t < 30) {                                                                 // down the road with her jar
@@ -184,11 +205,13 @@
     });
   }
   function drawFigures(ctx, t, label) {
-    S.drawRig(ctx, 'jesus', jesusPose(t), JESUS_FEET()[0], JESUS_FEET()[1]);
+    const sun = SUN(t);
+    S.drawRig(ctx, 'jesus', jesusPose(t), JESUS_FEET()[0], JESUS_FEET()[1], { light: sun, shadow: [78, 15, 0.4] });
     const w = womanFigure(t);
     if (w && w.a > 0.002) {
       const sf = S.rig('woman').sprite_feet;                                     // stand where the earlier painting stood
-      const m = S.drawRig(ctx, 'woman', w.pose, w.x + (sf[0] - FEET[0]) * w.s * (w.flip ? -1 : 1), w.y + (sf[1] - FEET[1]) * w.s, { scale: w.s, alpha: w.a, flip: w.flip });
+      const m = S.drawRig(ctx, 'woman', w.pose, w.x + (sf[0] - FEET[0]) * w.s * (w.flip ? -1 : 1), w.y + (sf[1] - FEET[1]) * w.s,
+        { scale: w.s, alpha: w.a, flip: w.flip, light: sun, shadow: [66 * w.s, 14 * w.s, 0.42] });
       const jd = jarTime(), J = S.rig('woman').parts.jar;
       const show = t < jd ? 1 : t - jd < 4.4 ? 1 - clamp01((t - jd - 1.4) / 3) : 0;
       if (m && label && show > 0 && t >= 30) {
@@ -198,7 +221,7 @@
         ctx.fillText(label, lx, ly + 8); ctx.restore();
       }
     }
-    for (const p of townFigures(t)) if (p.a > 0.002) S.drawRig(ctx, p.n, p.pose, p.x, p.y, { scale: p.s, alpha: p.a });
+    for (const p of townFigures(t)) if (p.a > 0.002) S.drawRig(ctx, p.n, p.pose, p.x, p.y, { scale: p.s, alpha: p.a, light: sun, shadow: [50 * p.s, 11 * p.s, 0.38] });
   }
   const JESUS_FEET = () => { const f = S.rig('jesus').sprite_feet || [135, 380]; return [BOX.jesus[0] + f[0], BOX.jesus[1] + f[1]]; };
 
@@ -255,6 +278,7 @@
         ctx.restore();
       }
     }
+    motes(ctx, t, L);
     // warmth around Him; the spring's light rising; the dark of hiding
     const g = ctx.createRadialGradient(1300, 860, 10, 1300, 860, 330 + 260 * L.warm);
     g.addColorStop(0, `rgba(246,220,152,${0.1 + 0.32 * L.warm})`); g.addColorStop(1, 'rgba(246,220,152,0)');
@@ -267,6 +291,19 @@
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     if (L.dark > 0) { ctx.fillStyle = `rgba(12,10,9,${L.dark})`; ctx.fillRect(0, 0, S.cw, S.ch); }
     if (L.spring > 0) { ctx.globalCompositeOperation = 'soft-light'; ctx.fillStyle = `rgba(246,220,152,${0.35 * L.spring})`; ctx.fillRect(0, 0, S.cw, S.ch); ctx.globalCompositeOperation = 'source-over'; }
+  }
+  // dust in the warm air around the well (kit v2): it drifts up slowly, brighter as the warmth around Him grows
+  function motes(ctx, t, L) {
+    if (!S.started || S.still) return;
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 30; i++) {
+      const bx = 1030 + (i * 137) % 760, rise = (t * (4 + (i % 3)) + i * 41) % 300, y = 1080 - (i * 89) % 260 - rise;
+      const x = bx + 20 * Math.sin(t * 0.21 + i * 1.7);
+      const edge = Math.min(1, rise / 60, (300 - rise) / 60), tw = 0.55 + 0.45 * Math.sin(t * 0.9 + i);
+      ctx.fillStyle = `rgba(255,238,196,${(0.12 + 0.3 * L.warm) * edge * tw})`;
+      ctx.beginPath(); ctx.arc(x, y, 1.6 + (i % 3) * 0.7, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
   }
   // light rising from the water: layered, each wider and fainter, so the edges stay soft
   function column(c, alpha) {
@@ -415,37 +452,28 @@
       [T.spring, 'John 4:14', 'the water that I shall give him shall be in him a well of water springing up into everlasting life.']
     ],
     arrival: [0, 0, 1430, 880, 1000, 640],
+    // the camera (kit v2): a few calm framings; a change of size is a cross-fade, never a zoom. The widest shows the whole
+    // height of the world; the closest (her face at "the smallest truth") still keeps the painting sharp.
     shots: T => [
-      [0.2, 4.5, 1560, 820, 1240, 1300],         // the world opens: the mountain, the well, the road, the town
-      [T.first, 9, 1720, 900, 960, 960],         // she comes down the road
-      [22, 8, 1530, 940, 780, 800],              // to the well
-      [T.sat - 0.4, 0.01, 1300, 930, 560, 430],  // He sat down tired beside the water
-      [T.laughed, 0.7, 1700, 940, 580, 430],
-      [T.bucket, 1.4, 1500, 950, 740, 780],
-      [T.chorus1, 7, 1470, 900, 900, 920],
-      [T.v2, 5, 1690, 930, 640, 480],            // she knew the chapter
-      [T.named, 1.2, 1310, 920, 600, 440],
-      [T.smallest, 1.0, 1700, 930, 600, 440],
-      [T.mountain, 2.4, 560, 500, 880, 1000],    // which mountain held the Father
-      [T.secrets, 2.6, 1450, 930, 760, 800],
-      [T.chorus2, 7, 1480, 900, 880, 880],
-      [T.ifYouKnow, 10, 1320, 900, 520, 400],    // why are You still here
-      [T.turnAway, 3, 1500, 930, 760, 800],
-      [T.roadBack, 3, 2000, 820, 900, 1000],     // the road back to the well
-      [T.hide, 2.5, 1700, 930, 600, 460],
-      [T.knowToo, 3, 1540, 950, 760, 780],       // the jar
-      [T.breakStart, 12, 1610, 960, 640, 600],
-      [T.auto + 0.5, 3, 1800, 900, 860, 900],
-      [T.jarStood, 1.5, 1655, 1065, 440, 380],  // the jar stood where I left it
-      [T.halfway, 2, 2020, 860, 820, 760],
-      [T.halfway + 4, 5, 2210, 770, 640, 640],
-      [T.comeSee, 1.5, 2282, 696, 380, 330],     // at the gate: come and see
-      [T.waiting, 6, 1800, 830, 1150, 1500],     // He was waiting at the well
-      [T.final, 14, 1640, 860, 1000, 1200],
-      [T.spring, 6, 1460, 900, 780, 800],        // the spring rises
-      [T.jarByWater, 3, 1530, 990, 640, 620],
-      [T.people, 4, 1720, 880, 950, 1100],
-      [T.lastCome, 8, 1600, 800, 1250, 1500]
+      [0.2, 2.2, 1560, 800, 1440, 2300],                                         // the world opens: mountain, well, road, town
+      [T.first + 0.5, 2, t => lerp(1720, herAt(t)[0], 0.5), 940, 980, 1400],    // she comes down the road (the camera walks with her)
+      [T.v1, 0, 1510, 960, 800, 1000],                                           // (a cut while we look down into the water)
+      [T.chorus1, 2.4, 1560, 880, 1200, 1800],                                   // Same well
+      [T.v2, 2, 1510, 960, 800, 1000],                                           // she knew the chapter
+      [T.smallest, 1.8, 1640, 950, 700, 760],                                    // the smallest truth (on her)
+      [T.mountain, 2, 900, 660, 1150, 1700],                                     // which mountain held the Father
+      [T.secrets, 2, 1510, 960, 800, 1000],
+      [T.chorus2, 2.4, 1560, 880, 1200, 1800],
+      [T.ifYouKnow, 2, 1500, 950, 720, 860],                                     // why are You still here
+      [T.roadBack, 2.2, 1860, 890, 1040, 1500],                                  // the road back to the well
+      [T.hide, 2, 1530, 960, 800, 1000],
+      [T.knowToo, 2, 1620, 980, 720, 820],                                       // she, the jar, and Him
+      [T.jarStood, 3, 1630, 1000, 720, 820],                                     // the jar stood where I left it
+      [T.halfway, 2.2, t => lerp(1950, herAt(t)[0], 0.6), t => lerp(880, herAt(t)[1], 0.4), 1000, 1450],   // halfway down the road
+      [T.comeSee, 2, 2190, 760, 700, 800],                                       // at the gate: come and see
+      [T.waiting, 2.4, 1680, 840, 1440, 2300],                                   // He was waiting at the well
+      [T.spring, 2.2, 1490, 920, 900, 1150],                                    // the spring You spoke of rises
+      [T.people, 2.4, 1600, 820, 1440, 2300]                                     // there are people down the road
     ],
     moments: T => [[0, 'I came to the well'], [T.sat - 0.6, 'He asks for water'], [T.v2, 'Which mountain'], [T.knowToo, 'Set down the jar'], [T.jarStood - 0.4, 'Come and see']],
     resumeBefore: T => T.jarStood,
