@@ -125,8 +125,55 @@
     }
     // where a point of a part is in the world, and the part's angle there (to hand a prop over, or place a label)
     function rigPoint(mats, part, x, y) { const m = mats[part]; return [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5], Math.atan2(m[1], m[0]) * 180 / Math.PI]; }
+    /* the scene's light on a figure (kit v2): o.shadow = [rx, ry, alpha] (world px), a soft shadow on the ground at its feet;
+       o.light = { dir: [dx, dy] (the way the light travels), warm: 'r,g,b,a', shade: 'r,g,b,a' }: the figure is drawn on its
+       own, then its lit side is warmed and its far side shaded, on the figure only, and laid into the scene. */
+    let fx = null;
     function drawRig(c, name, pose, x, y, o = {}) {
+      if (!o.light && !o.shadow) return drawParts(c, name, pose, x, y, o);
       const mats = rigMats(name, pose, x, y, o);
+      if (!mats) return null;
+      const al = o.alpha == null ? 1 : o.alpha;
+      if (o.shadow && al > 0) {
+        const [rx, ry, sa] = o.shadow;
+        c.save(); c.translate(x, y); c.scale(1, ry / rx);
+        const g = c.createRadialGradient(0, 0, 0, 0, 0, rx);
+        g.addColorStop(0, `rgba(30,20,10,${sa * al})`); g.addColorStop(0.6, `rgba(30,20,10,${0.5 * sa * al})`); g.addColorStop(1, 'rgba(30,20,10,0)');
+        c.fillStyle = g; c.beginPath(); c.arc(0, 0, rx, 0, Math.PI * 2); c.fill(); c.restore();
+      }
+      if (!o.light || !c.getTransform) return drawParts(c, name, pose, x, y, o, mats);
+      // where the figure falls on the screen
+      const M = c.getTransform(), M0 = [M.a, M.b, M.c, M.d, M.e, M.f], r = rigs[name];
+      let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+      for (const n of r.byZ) {
+        const im = img[name + '.' + n]; if (!im || !im.ok) continue;
+        const m = mul(M0, mats[n]), w = im.i.width, h = im.i.height;
+        for (const [u, v] of [[0, 0], [w, 0], [0, h], [w, h]]) {
+          const px = m[0] * u + m[2] * v + m[4], py = m[1] * u + m[3] * v + m[5];
+          x0 = Math.min(x0, px); y0 = Math.min(y0, py); x1 = Math.max(x1, px); y1 = Math.max(y1, py);
+        }
+      }
+      const cv = c.canvas;
+      x0 = Math.max(0, Math.floor(x0) - 2); y0 = Math.max(0, Math.floor(y0) - 2); x1 = Math.min(cv.width, Math.ceil(x1) + 2); y1 = Math.min(cv.height, Math.ceil(y1) + 2);
+      if (x1 <= x0 || y1 <= y0) return mats;
+      if (!fx) fx = document.createElement('canvas');
+      const bw = x1 - x0, bh = y1 - y0;
+      if (fx.width < bw || fx.height < bh) { fx.width = Math.max(fx.width, bw); fx.height = Math.max(fx.height, bh); }
+      const f = fx.getContext('2d');
+      f.setTransform(1, 0, 0, 1, 0, 0); f.globalAlpha = 1; f.globalCompositeOperation = 'source-over'; f.clearRect(0, 0, bw, bh);
+      f.setTransform(M0[0], M0[1], M0[2], M0[3], M0[4] - x0, M0[5] - y0);
+      drawParts(f, name, pose, x, y, Object.assign({}, o, { alpha: 1 }), mats);
+      // warm on the side the light comes from, shade on the far side
+      const [dx, dy] = o.light.dir, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, cx = bw / 2, cy = bh / 2, R = Math.hypot(bw, bh) / 2;
+      const g = f.createLinearGradient(cx - ux * R, cy - uy * R, cx + ux * R, cy + uy * R);
+      g.addColorStop(0, `rgba(${o.light.warm})`); g.addColorStop(0.45, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(${o.light.shade})`);
+      f.setTransform(1, 0, 0, 1, 0, 0); f.globalCompositeOperation = 'source-atop'; f.fillStyle = g; f.fillRect(0, 0, bw, bh);
+      f.globalCompositeOperation = 'source-over';
+      c.save(); c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = c.globalAlpha * al; c.drawImage(fx, 0, 0, bw, bh, x0, y0, bw, bh); c.restore();
+      return mats;
+    }
+    function drawParts(c, name, pose, x, y, o = {}, given) {
+      const mats = given || rigMats(name, pose, x, y, o);
       if (!mats) return null;
       const r = rigs[name];
       const a0 = c.globalAlpha;
@@ -172,62 +219,120 @@
       timeline(); request();
     }).catch(() => {});
 
-    /* ---------- the camera: one shot per moment of the song ([time, move seconds, x, y, view height, min view width]) ---------- */
+    /* ---------- the camera (v2, Nov 25): a few calm framings, and never a zoom in or out.
+       shots: [time, transition seconds, x, y, view height, min view width], in the painting's own pixels; x and y may be
+       functions of time (the camera following someone along the road).
+       The size of the picture only changes by a cross-fade (a dissolve, as a film cuts) or a cut (under 0.05 s). Between
+       two framings of about the same size on this screen (within 8%), or near each other, the camera glides sideways and
+       keeps the size it has. While a framing holds, it drifts a little sideways. With Reduced Motion every change is a
+       cut and nothing drifts. ---------- */
     const ARRIVAL = spec.arrival;
+    const soft = p => p <= 0 ? 0 : p >= 1 ? 1 : p * p * p * (p * (p * 6 - 15) + 10);
+    const val = (v, t) => typeof v === 'function' ? v(t) : v;
+    const SAME = Math.log(1.08);
+    function shotAt(i) { return i < 0 ? [0, 0, ...ARRIVAL.slice(2)] : shots[i]; }
+    function seen(vh, minW) {                                     // the view height this screen will really show
+      const fh = Math.max(ch, refH || ch);
+      if (!cw || !fh) return vh;
+      const aspect = cw / fh;
+      return Math.min(Math.max(vh, minW / aspect), H, W / aspect);
+    }
+    // for each framing on this screen: how the camera gets there and the size it then holds (a glide keeps its size)
+    let planned = null, plannedFor = '';
+    function plan() {
+      const key = cw + 'x' + Math.max(ch, refH || ch);
+      if (planned && plannedFor === key && planned.shots === shots) return planned;
+      const steps = [];
+      let size = seen(ARRIVAL[4], ARRIVAL[5]);
+      for (let i = 0; i < shots.length; i++) {
+        const cur = shots[i], prev = shotAt(i - 1), target = seen(cur[4], cur[5]), t = cur[0];
+        const far = Math.hypot(val(cur[2], t) - val(prev[2], t), val(cur[3], t) - val(prev[3], t)) / (1.5 * size);
+        if (cur[1] < 0.05) { steps.push(['cut', 0, target]); size = target; }
+        else if (Math.abs(Math.log(target / size)) > SAME || far > 0.6) { steps.push(['dissolve', Math.min(2.4, Math.max(1.2, cur[1])), target]); size = target; }
+        else steps.push(['glide', Math.max(2.5, cur[1]), size]);
+      }
+      planned = { shots, steps }; plannedFor = key;
+      return planned;
+    }
+    function drift(i, t) {                                        // sideways, 1.6% of the view's height over the whole hold
+      if (reduced.matches || i < 0) return 0;
+      const sh = shots[i], next = shots[i + 1], hold = (next ? next[0] : T.end + 10) - sh[0];
+      return (i % 2 ? -1 : 1) * 0.016 * sh[4] * clamp01((t - sh[0]) / Math.max(1, hold));
+    }
+    function framing(i, t) {
+      const sh = shotAt(i), size = i < 0 ? seen(sh[4], sh[5]) : plan().steps[i][2], at = reduced.matches ? sh[0] : t;   // with Reduced Motion it does not follow
+      return [val(sh[2], at) + drift(i, t), val(sh[3], at), size, 0];
+    }
+    const progress = (i, t) => { const s = plan().steps[i]; return s[1] > 0 ? (t - shots[i][0]) / s[1] : 1; };
+    // the framing now: { a: [x, y, view height, 0] } and, during a dissolve, b (the framing it leaves) and mix
     function camera(t) {
-      if (!started) return ARRIVAL.slice(2);
+      if (!started) return { a: ARRIVAL.slice(2) };
       let i = -1;
       for (let k = 0; k < shots.length; k++) if (shots[k][0] <= t) i = k;
-      const cur = i < 0 ? [0, 0, ...ARRIVAL.slice(2)] : shots[i];
-      const prev = i <= 0 ? [0, 0, ...ARRIVAL.slice(2)] : shots[i - 1];
-      let p = cur[1] > 0.02 ? (t - cur[0]) / cur[1] : 1;
-      p = reduced.matches ? (p > 0 ? 1 : 0) : ease(p);
-      const v = [2, 3, 5].map(j => lerp(prev[j], cur[j], p));
-      const vh = Math.exp(lerp(Math.log(prev[4]), Math.log(cur[4]), p));
-      if (!reduced.matches && p >= 1) {                            // a slow drift while a shot holds
-        const next = shots[i + 1];
-        const hold = (next ? next[0] : T.end + 10) - (cur[0] + cur[1]);
-        const q = hold > 0 ? clamp01((t - cur[0] - cur[1]) / hold) : 0;
-        return [v[0], v[1], vh * (1 - 0.04 * q), v[2]];
-      }
-      return [v[0], v[1], vh, v[2]];
+      const A = framing(i, t);
+      if (i < 0) return { a: A };
+      const kind = plan().steps[i][0], p = progress(i, t);
+      if (kind === 'cut' || p >= 1 || reduced.matches) return { a: A };
+      // where it leaves from: the framing before, live; or, if that move had not finished, wherever the camera was
+      const t0 = shots[i][0], B = i > 0 && progress(i - 1, t0) < 1 ? camera(t0 - 1e-4).a : framing(i - 1, t);
+      if (kind === 'dissolve') return { a: A, b: B, mix: soft(p) };
+      const q = soft(p);
+      return { a: [lerp(B[0], A[0], q), lerp(B[1], A[1], q), A[2], 0] };
     }
 
     /* ---------- drawing ---------- */
-    let dpr = 1, cw = 0, ch = 0;
+    let dpr = 1, cw = 0, ch = 0, refW = 0, refH = 0;
     function size() {
       const r = stage.getBoundingClientRect();
       dpr = Math.min(2, window.devicePixelRatio || 1);
       const w = Math.max(1, Math.round(r.width * dpr)), h = Math.max(1, Math.round(r.height * dpr));
       if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
       cw = w; ch = h;
+      // the painting keeps its size when a page makes the stage shorter (a question opening below it): it is cropped,
+      // never zoomed. The size is measured again when the window itself changes.
+      if (w !== refW) { refW = w; refH = h; } else refH = Math.max(refH, h);
     }
+    addEventListener('resize', () => { refW = 0; });
     let focusY = spec.focus == null ? 0.42 : spec.focus;
-    function view(t) {
-      const [cx, cy, vh0, minW] = camera(t);
-      const aspect = cw / ch;
+    let forced = null;                                            // the framing being painted (two during a dissolve)
+    function frame(F) {
+      const [cx, cy, vh0, minW] = F, fh = Math.max(ch, refH || ch);
+      const aspect = cw / fh;
       let vh = Math.max(vh0, minW / aspect);
       vh = Math.min(vh, H, W / aspect);
-      const k = ch / vh;
+      const k = fh / vh;
       let ox = cw / 2 - cx * k, oy = ch * focusY - cy * k;
       ox = Math.min(0, Math.max(cw - W * k, ox));
       oy = Math.min(0, Math.max(ch - H * k, oy));
       return { k, ox, oy };
     }
+    function view(t) { return frame(forced || camera(t).a); }
     function toScreen(x, y, t) {
       const v = view(t == null ? now() : t);
       return [(x * v.k + v.ox) / dpr, (y * v.k + v.oy) / dpr];
     }
     function inWorld(c, t) { const v = view(t); c.setTransform(v.k, 0, 0, v.k, v.ox, v.oy); }
 
+    let buf = null;
+    function paintAt(c, t, F) {
+      forced = F;
+      c.setTransform(1, 0, 0, 1, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over';
+      c.fillStyle = spec.ground; c.fillRect(0, 0, cw, ch);
+      try { spec.paint(c, t, S); } finally { forced = null; }
+    }
     function render() {
       queued = false;
       if (stage.hidden || stage.dataset.idle === '1') return;   // a page may mark the painting as out of view
       size();
-      const t = now();
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.fillStyle = spec.ground; ctx.fillRect(0, 0, cw, ch);
-      spec.paint(ctx, t, S);
+      const t = now(), cam = camera(t);
+      if (cam.b) {                                                // a dissolve: the framing it leaves, then the new one over it
+        paintAt(ctx, t, cam.b);
+        if (!buf) buf = document.createElement('canvas');
+        if (buf.width !== cw || buf.height !== ch) { buf.width = cw; buf.height = ch; }
+        paintAt(buf.getContext('2d'), t, cam.a);
+        ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = cam.mix; ctx.globalCompositeOperation = 'source-over';
+        ctx.drawImage(buf, 0, 0); ctx.globalAlpha = 1;
+      } else paintAt(ctx, t, cam.a);
       if (spec.preload) spec.preload(t, S);
       document.dispatchEvent(new CustomEvent(spec.events + ':frame', { detail: { t } }));
       if (playing()) request();
@@ -356,7 +461,7 @@
     function setFocus(y) { focusY = y; request(); }
 
     const S = {
-      start, toggle, seek, act, card, setFocus, request, toScreen, load, keep, inWorld, ok, img, along, loadRig, drawRig, rigMats, rigPoint, rig: n => rigs[n] && rigs[n].ok ? rigs[n].json : null,
+      start, toggle, seek, act, card, setFocus, request, toScreen, camera: t => camera(t == null ? now() : t), load, keep, inWorld, ok, img, along, loadRig, drawRig, rigMats, rigPoint, rig: n => rigs[n] && rigs[n].ok ? rigs[n].json : null,
       get started() { return started; }, get playing() { return playing(); }, get time() { return now(); },
       get duration() { return host ? (hostOnSong() && isFinite(host.duration) ? host.duration : spec.duration) : (isFinite(audio.duration) ? audio.duration : spec.duration); },
       get T() { return T; }, get moments() { return moments; }, get cues() { return cues; }, get notes() { return notes; },
