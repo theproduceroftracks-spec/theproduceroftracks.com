@@ -10,7 +10,8 @@
   var ROOMS = {
     storm: { title: 'The Storm', song: 'Bid Me Come', ref: 'Matthew 14', next: 'floor', line: 'I have seen enough to trust You. Why am I still afraid?' },
     floor: { title: 'The Floor Moved', song: 'The Floor Moved', ref: 'Acts 16', next: 'well', line: 'At midnight they sang.' },
-    well:  { title: 'The Well', song: '', ref: 'John 4', next: 'storm', line: 'What do you keep returning to that never satisfies you?' }
+    well:  { title: 'The Well', song: '', ref: 'John 4', next: 'storm', line: 'What do you keep returning to that never satisfies you?' },
+    medicine: { title: 'Medicine of Immortality', song: '', ref: 'John 6', next: 'storm', line: 'What keeps your hand closed?' }
   };
   var ENCOUNTER_VIEWS = ['rooms', 'storm', 'floor', 'well'];
 
