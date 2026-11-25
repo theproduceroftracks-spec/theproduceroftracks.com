@@ -20,10 +20,11 @@
 <meta name="apple-mobile-web-app-title" content="The Well">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="robots" content="noindex, nofollow">
-<link rel="stylesheet" href="well.css?v=8">
+<link rel="stylesheet" href="well.css?v=9">
 <link rel="stylesheet" href="/assets/tpot-encounter.css?v=1">
-<link rel="preload" as="image" href="assets/the-well.jpg">
-<script src="well.js?v=8" defer></script>
+<link rel="preload" as="image" href="scene/back.jpg">
+<script src="scene.js?v=1" defer></script>
+<script src="well.js?v=9" defer></script>
 </head>
 <body>
 <header class="site-bar enc-bar">
@@ -32,27 +33,62 @@
   <a class="wordmark enc-mid" href="#arrival" data-show="arrival"><span class="enc-kicker">Track 1</span><span class="enc-name">The Well</span></a>
   <a class="album-link enc-right" href="/find-me/"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="8" r="1.6" fill="currentColor"/></svg><span class="enc-label">Album</span></a>
 </header>
+<div class="stage" data-stage aria-hidden="true"><canvas></canvas></div>
+<audio id="well-song" preload="none" src="/assets/find-me-e3b/01.mp3"></audio>
 <main id="experience">
   <section id="arrival" class="scene" aria-labelledby="arrival-title">
-    <a class="water-touch" href="#scripture" data-water aria-label="Touch the water to hear Same Well, Same Thirst and open John 4">
+    <a class="water-touch" href="#song" data-water data-track="well-touch" aria-label="Touch the water to hear Same Well, Same Thirst">
       <span class="water-label">Touch the water</span>
     </a>
     <div class="water-ripple" aria-hidden="true"></div>
     <div class="scene-copy">
       <p class="eyebrow">The Well <span></span> John 4</p>
       <h1 id="arrival-title" tabindex="-1">Come to the well.</h1>
+      <p class="return-note" data-return hidden>Your jar is still by the water.</p>
       <div class="scene-actions">
-        <a class="quiet" href="#scripture" data-show="scripture">Read John 4 <span aria-hidden="true">→</span></a>
-        <button class="quiet" type="button" data-arrival-sound hidden>Play music</button>
+        <a class="quiet" href="#scripture" data-show="scripture" data-track="well-read">Read John 4 <span aria-hidden="true">→</span></a>
       </div>
+    </div>
+  </section>
+
+  <section id="song" class="scene song" aria-labelledby="song-title">
+    <h2 id="song-title" class="visually-hidden" tabindex="-1">Same Well, Same Thirst</h2>
+    <div class="song-text">
+      <figure class="song-note" data-note hidden><figcaption data-note-ref></figcaption><blockquote><p data-note-text></p></blockquote></figure>
+      <div class="song-lines"><p class="line-now" data-line-now></p><p class="line-next" data-line-next aria-hidden="true"></p></div>
+    </div>
+    <div class="jar-slot" data-jar-slot="song">
+      <div class="jar-ask" data-jar-ask hidden>
+        <p class="jar-q" id="jar-q">What do you keep returning to that never satisfies you?</p>
+        <div class="jar-choices" role="group" aria-labelledby="jar-q">
+          <button type="button" data-jar-choice="a glowing screen" data-track="well-jar-choice" aria-pressed="false">A glowing screen</button>
+          <button type="button" data-jar-choice="someone’s approval" data-track="well-jar-choice" aria-pressed="false">Someone’s approval</button>
+          <button type="button" data-jar-choice="something I drink or take" data-track="well-jar-choice" aria-pressed="false">Something I drink or take</button>
+          <button type="button" data-jar-choice="being right" data-track="well-jar-choice" aria-pressed="false">Being right</button>
+          <button type="button" data-jar-choice="staying busy" data-track="well-jar-choice" aria-pressed="false">Staying busy</button>
+          <button type="button" data-jar-choice="something I won’t name" data-track="well-jar-choice" aria-pressed="false">Something I won’t name</button>
+        </div>
+        <input class="jar-own" type="text" maxlength="40" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" placeholder="Or name it yourself" aria-label="Or name it yourself" data-jar-own data-measure-private>
+        <button class="jar-hold" type="button" data-jar-hold data-track="well-jar-hold" aria-label="Set down the jar"><span class="jar-ring" aria-hidden="true"></span><span data-jar-hold-label>Hold to set it down</span></button>
+        <p class="jar-note">Your answer stays on this page. It isn’t saved or sent.</p>
+      </div>
+      <p class="jar-done" data-jar-done hidden>Your jar is by the water.</p>
+    </div>
+    <div class="song-end" data-song-end hidden>
+      <a class="action" href="#prayer" data-show="prayer" data-track="well-to-prayer">Pray <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="song-bar">
+      <button class="song-toggle" type="button" data-song-toggle data-track="well-song-toggle" aria-label="Play"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5.5v13l10.5-6.5z"/><path class="i-pause" d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z"/></svg></button>
+      <div class="song-track" data-song-track><div class="song-fill" data-song-fill></div></div>
+      <span class="song-time" data-song-time aria-hidden="true">0:00</span>
+      <a class="song-read" href="#scripture" data-show="scripture" data-track="well-read">John 4</a>
     </div>
   </section>
 
   <section id="scripture" class="page" aria-labelledby="scripture-title">
     <div class="audio-card" hidden>
       <div><span class="eyebrow">From the album</span><strong>Same Well, Same Thirst</strong></div>
-      <button type="button" data-sound>Play excerpt</button>
-      <audio preload="none" src="assets/same-well-excerpt-e3b.mp3"></audio>
+      <button type="button" data-sound data-track="well-song-open">Hear the song</button>
       <p class="sound-error" role="status" hidden>Audio is unavailable. You can read on below.</p>
     </div>
     <p class="eyebrow">John 4 <span></span> At the well</p>
@@ -135,7 +171,7 @@
     <p class="eyebrow">Examination</p>
     <h2 id="examine-title" tabindex="-1">What part of myself am I always trying to prove?</h2>
     <p>Think of the last time you checked who had noticed you. Bring that moment to Jesus in your own words.</p>
-    <div class="still-water" aria-hidden="true"></div>
+    <div class="jar-slot" data-jar-slot="examine"></div>
     <a class="action" href="#prayer" data-show="prayer">Pray <span aria-hidden="true">→</span></a>
   </section>
 
@@ -155,6 +191,13 @@
   <section id="rest" class="page examination rest" aria-labelledby="rest-title">
     <p class="eyebrow">John 4:15</p>
     <h2 id="rest-title" tabindex="-1">“Give me this water.”</h2>
+    <figure class="keepsake" data-keepsake hidden>
+      <img data-keepsake-img alt="A card: “Sir, give me this water, that I thirst not”, John 4:15, beneath a painting of Jesus seated at Jacob’s well with a water jar left by the water." width="1080" height="1350">
+      <figcaption>
+        <button class="action" type="button" data-keepsake-save data-track="well-keepsake">Keep this card <span aria-hidden="true">↓</span></button>
+        <p class="keepsake-status" role="status" data-keepsake-status></p>
+      </figcaption>
+    </figure>
     <p>You can put your phone down now.</p>
     <a class="next-encounter" href="/#storm">
       <span><small>Next encounter · Matthew 14</small><strong>The Storm</strong><span>Go with Peter onto the water.</span></span>
@@ -164,9 +207,17 @@
       <span><small>Another encounter · 2 Samuel 11-12</small><strong>The Roof</strong><span>Go to David’s rooftop and break the king’s seal.</span></span>
       <span aria-hidden="true">→</span>
     </a>
+    <div class="home-screen" data-homescreen hidden>
+      <button class="invite-button" type="button" data-install data-track="well-install" hidden>Add The Well to your home screen</button>
+      <p data-install-ios hidden>To come back, add The Well to your home screen: tap Share, then Add to Home Screen.</p>
+    </div>
     <a class="quiet" href="#arrival" data-show="arrival">Back to the Well <span aria-hidden="true">↗</span></a>
   </section>
 </main>
+<div class="song-mini" data-song-mini hidden>
+  <button class="song-toggle" type="button" data-song-toggle data-track="well-mini-toggle" aria-label="Pause"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-play" d="M8 5.5v13l10.5-6.5z"/><path class="i-pause" d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z"/></svg></button>
+  <a href="#song" data-show="song" data-track="well-mini-back"><small>Playing</small> Same Well, Same Thirst</a>
+</div>
 <noscript><p class="no-script">Read John 4 directly. <a href="https://www.gutenberg.org/ebooks/10">King James Bible</a></p></noscript>
 </body>
 </html>

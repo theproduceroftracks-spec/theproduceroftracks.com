@@ -45,9 +45,9 @@ main { max-width: 850px; margin-inline: auto; }
   align-items: end;
   min-height: calc(100svh - 62px);
   background-color: #222a23;
-  background-image: linear-gradient(0deg, #141612 3%, #141612e8 24%, #14161218 64%), url(assets/the-well.jpg);
+  background-image: linear-gradient(0deg, #141612 3%, #141612e8 24%, #14161218 64%), url(scene/back.jpg);
   background-size: cover;
-  background-position: center 53%;
+  background-position: 50% 66%;
 }
 .scene-copy { position: relative; padding: 18px clamp(22px, 6vw, 56px) max(34px, env(safe-area-inset-bottom)); }
 .scene-actions { display: flex; flex-wrap: wrap; gap: 4px 20px; }
@@ -229,4 +229,125 @@ cite { font: .78rem/1.4 var(--sans); color: var(--accent); }
 @media (max-width: 460px) {
   #prayer h2 { font-size: clamp(2.15rem, 8.8vw, 2.6rem); }
   #prayer .prayer-text { font-size: clamp(1.1rem, 4.85vw, 1.28rem); }
+}
+
+
+/* ===================== The Well, living (Nov 24, 2026) =====================
+   The painted scene lives on one canvas behind the page (scene.js). The arrival and the song sit over it;
+   the reading pages hide it. No web fonts, no outside requests. */
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.stage { position: fixed; z-index: 0; inset: 0; background: #141612; }
+.stage canvas { display: block; width: 100%; height: 100%; }
+main { position: relative; z-index: 1; }
+.has-stage .scene { background: none; overflow: visible; }
+.has-stage .scene::before {
+  content: ""; position: fixed; z-index: -1; left: 0; right: 0; bottom: 0; height: 62vh; pointer-events: none;
+  background: linear-gradient(0deg, #141612f2 0%, #141612d9 26%, #14161280 52%, #14161200 100%);
+}
+.has-stage #arrival::before { height: 46vh; }
+.has-stage .water-touch { width: 250px; height: 110px; min-height: 0; z-index: 1; }
+.return-note { margin: -4px 0 14px; font: italic 1.12rem/1.4 var(--serif); color: var(--accent); }
+
+/* the song */
+.scene.song {
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; gap: 14px;
+  padding: 0 clamp(18px, 5vw, 48px) max(14px, env(safe-area-inset-bottom));
+}
+.song-text { display: grid; gap: 14px; }
+.song-note { margin: 0; max-width: 36ch; padding: 9px 13px 10px; border-left: 2px solid #cc9b57; background: #141612a6;
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); animation: well-in .7s ease both; }
+.song-note figcaption { font: bold .64rem/1.3 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.song-note blockquote { margin: 5px 0 0; padding: 0; border: 0; font: italic 1.02rem/1.45 var(--serif); }
+.song-note blockquote p { margin: 0; }
+.song-lines { min-height: 4.6em; }
+.line-now { margin: 0; font: 400 clamp(1.55rem, 6.4vw, 2.7rem)/1.14 var(--serif); letter-spacing: -.02em; text-wrap: balance; text-shadow: 0 2px 22px #000c; }
+.line-now.is-new { animation: well-in .55s ease both; }
+.line-next { margin: 8px 0 0; min-height: 1.3em; font: 1rem/1.3 var(--serif); color: #d2c6aa8c; }
+@keyframes well-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.song-bar { display: flex; align-items: center; gap: 12px; }
+.song-toggle { flex: none; display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border-radius: 50%;
+  border: 1px solid #e8d3a5; background: #e8d3a5; color: #241e15; cursor: pointer; }
+.song-toggle svg { width: 22px; height: 22px; fill: currentColor; }
+.song-toggle .i-pause, .song-toggle.is-playing .i-play { display: none; }
+.song-toggle.is-playing .i-pause { display: block; }
+.song-track { position: relative; flex: 1; height: 32px; cursor: pointer; touch-action: manipulation; }
+.song-track::before { content: ""; position: absolute; left: 0; right: 0; top: 15px; height: 2px; background: #f3e8cf38; }
+.song-fill { position: absolute; left: 0; top: 15px; width: 0; height: 2px; background: var(--accent); }
+.song-moment { position: absolute; top: 0; width: 32px; height: 32px; margin-left: -16px; padding: 0; border: 0; background: none; cursor: pointer; }
+.song-moment::before { content: ""; position: absolute; left: 10px; top: 10px; width: 12px; height: 12px; box-sizing: border-box;
+  border: 2px solid var(--accent); border-radius: 50%; background: #141612; }
+.song-moment::after { content: attr(data-label); position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); white-space: nowrap;
+  padding: 3px 7px; background: #141612eb; color: var(--paper); font: .72rem/1.2 var(--sans); opacity: 0; pointer-events: none; transition: opacity .2s; }
+.song-moment:hover::after, .song-moment:focus-visible::after { opacity: 1; }
+.song-moment:first-of-type::after { left: 0; transform: none; }
+.song-moment:last-of-type::after { left: auto; right: 0; transform: none; }
+.song-time { min-width: 2.8em; color: var(--muted); font: .78rem/1 ui-monospace, Menlo, monospace; }
+.song-read { display: inline-flex; align-items: center; min-height: 44px; color: var(--paper); font: bold .82rem/1 var(--sans); }
+.song-end .action { margin: 0; }
+
+/* the jar */
+.jar-ask { max-width: 560px; padding: 14px 14px 12px; border: 1px solid #807660; background: #141612d6;
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); animation: well-in .6s ease both; }
+.jar-q { margin: 0 0 10px; font: 400 1.22rem/1.3 var(--serif); color: var(--paper); }
+.jar-choices { display: flex; flex-wrap: wrap; gap: 6px; }
+.jar-choices button { min-height: 40px; padding: 6px 12px; border: 1px solid #b6aa8c; border-radius: 20px; background: transparent;
+  color: var(--paper); font: .84rem/1.2 var(--sans); cursor: pointer; }
+.jar-choices button[aria-pressed="true"] { border-color: #e8d3a5; background: #e8d3a5; color: #241e15; }
+.jar-own { box-sizing: border-box; width: 100%; min-height: 44px; margin-top: 8px; padding: 8px 12px; border: 1px solid #6a604b;
+  border-radius: 0; background: #0f110e; color: var(--paper); font: 16px/1.3 var(--serif); }
+.jar-own::placeholder { color: #a99c80; }
+.jar-hold { position: relative; overflow: hidden; width: 100%; min-height: 54px; margin-top: 10px; border: 1px solid #e8d3a5;
+  background: #e8d3a5; color: #241e15; font: bold .95rem/1.2 var(--sans); cursor: pointer;
+  touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.jar-ring { position: absolute; inset: 0; background: #f6dc98; transform: scaleX(var(--p, 0)); transform-origin: left; }
+.jar-hold [data-jar-hold-label] { position: relative; }
+.jar-note { margin: 8px 0 0; color: var(--muted); font: .78rem/1.35 var(--sans); }
+.jar-done { margin: 0; font: italic 1.12rem/1.4 var(--serif); color: var(--accent); }
+body.is-asking .song-note, body.is-asking .line-next { display: none; }
+body.is-asking .song-lines { min-height: 0; }
+body.is-asking .line-now { font-size: clamp(1.2rem, 4.6vw, 1.9rem); }
+.examination .jar-slot { margin-top: 26px; }
+.examination .jar-ask { background: #20241b; }
+
+/* the song while reading */
+.song-mini { position: fixed; z-index: 4; left: 50%; bottom: max(12px, env(safe-area-inset-bottom)); transform: translateX(-50%);
+  display: flex; align-items: center; gap: 10px; max-width: calc(100% - 32px); padding: 6px 16px 6px 6px; border: 1px solid #6a604b;
+  border-radius: 30px; background: #1d1f19f2; box-shadow: 0 8px 30px #0009; }
+.song-mini .song-toggle { width: 40px; height: 40px; }
+.song-mini a { overflow: hidden; color: var(--paper); font: bold .84rem/1.25 var(--sans); text-decoration: none; white-space: nowrap; text-overflow: ellipsis; }
+.song-mini small { display: block; color: var(--accent); font: bold .6rem/1.2 var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+body:has(.song-mini:not([hidden])) .page { padding-bottom: 104px; }
+
+/* the keepsake and the way back */
+.keepsake { max-width: 340px; margin: 22px 0 18px; }
+.keepsake img { display: block; width: 100%; height: auto; border: 1px solid #514b3e; box-shadow: 0 18px 50px #0009; }
+.keepsake figcaption { margin-top: 12px; }
+.keepsake .action { margin-top: 0; }
+.keepsake-status { margin: 8px 0 0; color: var(--muted); font-size: .85rem; }
+.keepsake-status:empty { margin: 0; }
+.home-screen { max-width: 42ch; margin: 18px 0 6px; color: var(--muted); font-size: .88rem; }
+.home-screen p { margin: 0; }
+
+/* phones: the painting is a frame across the top, the words sit on the page beneath it */
+@media (max-width: 759px) {
+  .stage { bottom: auto; height: 64svh; -webkit-mask-image: linear-gradient(#000 80%, transparent); mask-image: linear-gradient(#000 80%, transparent); }
+  .has-stage .scene::before { display: none; }
+  .has-stage #arrival { align-items: start; padding-top: calc(64svh - 72px); }
+  .stage { transition: height .5s ease; }
+  body.is-asking .stage { height: 44svh; }
+  body.is-asking .scene.song { padding-top: calc(44svh - 80px); }
+  .scene.song { padding-top: calc(64svh - 96px); justify-content: flex-start; }
+  .scene.song .song-text { margin-top: auto; }
+  .song-lines { min-height: 4em; }
+  .line-now { font-size: clamp(1.45rem, 6.6vw, 1.9rem); }
+  body.is-asking .song-lines { display: none; }
+}
+@media (min-width: 760px) {
+  .scene.song { padding-bottom: 22px; }
+  .song-text { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+  .song-note { grid-column: 2; grid-row: 1; max-width: 30ch; }
+  .song-lines { grid-column: 1; grid-row: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .line-now.is-new, .song-note, .jar-ask { animation: none; }
 }
