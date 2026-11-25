@@ -32,23 +32,19 @@ a { color: var(--cream); text-underline-offset: 3px; }
 .in-reader .move, .in-reader h4 { scroll-margin-top: 12px; }
 .top .where { color: var(--cream-dim); font: 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
 
-/* the scene */
-.art { display: block; width: 100%; height: auto; --o: .12; }
-.art[data-state="recognize"] { --o: .42; }
-.art[data-state="open"] { --o: 1; }
-.art .seam { transform-box: fill-box; transform-origin: right center; transform: scaleX(calc(1 + var(--o) * 8)); }
-.art .sill { opacity: calc(.35 + var(--o) * .65); }
-.art .halo { opacity: calc(var(--o) * .9); }
-.art .beam { transform-box: fill-box; transform-origin: 50% 0; transform: scaleX(calc(.25 + var(--o) * .75)); opacity: calc(.05 + var(--o) * .38); }
-.art .table { transform: translateY(calc((1 - var(--o)) * 26px)); }
-.art .tablelight { opacity: calc(var(--o) * .2); mix-blend-mode: screen; }
+/* the scene: the approved painting (engine-made), living on the shared kit; a still image without script */
+.painted { position: relative; display: block; margin: 0; }
+.painted img { display: block; width: 100%; height: auto; }
+.painted .p-lit { position: absolute; inset: 0; opacity: 0; }
+.painted[data-state="open"] .p-lit { opacity: 1; }
 @media (prefers-reduced-motion: no-preference) {
-  .art { transition: --o 2.4s cubic-bezier(.3, .1, .2, 1); }
+  .painted .p-lit { transition: opacity 2.4s cubic-bezier(.3, .1, .2, 1); }
 }
 
-.hero { position: relative; max-width: 1100px; margin: 0 auto; }
-.hero .art { max-height: 78svh; width: 100%; object-fit: cover; }
-.hero-copy { padding: 0 max(20px, env(safe-area-inset-left)) 8px; margin-top: -26px; position: relative; }
+.hero { position: relative; max-width: 1280px; margin: 0 auto; }
+.hero .stage { width: 100%; aspect-ratio: 3 / 2; max-height: 78svh; }
+body.is-song .hero-copy, body.is-song .reading, body.is-song .foot { display: none; }
+.hero-copy { padding: 0 max(20px, env(safe-area-inset-left)) 8px; margin-top: -26px; position: relative; z-index: 1; }
 .kicker, .num, .song figcaption, .src, .note, .quiet {
   font: 12px/1.5 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--cream-dim);
 }
@@ -115,8 +111,8 @@ h4 { margin: 0 0 10px; font: 600 1.15rem/1.3 var(--serif); color: var(--paper); 
 
 /* desktop: scene beside the title */
 @media (min-width: 900px) {
-  .hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: end; gap: 40px; padding: 28px 40px 0; }
-  .hero .art { max-height: 82vh; border: 1px solid var(--line); }
+  .hero { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: end; gap: 40px; padding: 28px 40px 0; }
+  .hero .stage { max-height: 82vh; border: 1px solid var(--line); }
   .hero-copy { margin: 0 0 30px; padding: 0; }
   .reading { padding-top: 30px; }
 }
