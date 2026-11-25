@@ -75,7 +75,7 @@
       const s = JSON.parse(localStorage.getItem(KEY) || 'null') || {};
       const kept = Array.isArray(s.kept) ? s.kept : [];
       let last;
-      if (id === 'keep' && scene.saved.done) last = { route: 'storm', pos: 1, at: Date.now(), place: 'Next, after Medicine' };
+      if (id === 'keep' && scene.saved.done) last = { route: 'floor', pos: 1, at: Date.now(), place: 'Next, after Medicine' };
       else if (PLACES[id]) last = { route: 'medicine', pos: 1, at: Date.now(), href: '/medicine/#' + id, place: PLACES[id] };
       else return;
       localStorage.setItem(KEY, JSON.stringify({ last, kept }));

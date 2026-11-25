@@ -87,7 +87,7 @@
     track: 5, title: 'Medicine of Immortality', audio: 'medicine-song', store: 'tpot.medicine.v1', events: 'medicine',
     size: [W, H], ground: '#0f0d0f', duration: 340.6, lastCue: [331.83, 338.76], focus: 0.42,
     files: { dark: 'dark.jpg', lit: 'lit.jpg', door: 'door.webp', niche: 'niche.webp', fish: 'fish.webp', table: 'table.webp', hand: 'hand.webp',
-      darkNo: 'dark-nohand.jpg', litNo: 'lit-nohand.jpg', tableNo: 'table-nohand.webp' },
+      darkNo: 'dark-nohand.jpg', litNo: 'lit-nohand.jpg', tableNo: 'table-nohand.webp', phone: 'phone-niche.webp' },
     first: ['dark', 'door'],
     // each moment, found by its words in the album's lyric timings (with the time to use if a line can't be found)
     lines: {
@@ -174,6 +174,16 @@
         ctx.drawImage(img[name].i, b[0], b[1], b[2] - b[0], b[3] - b[1]);
       }
       ctx.globalAlpha = 1;
+      // one object from today (engine/objects.py): "The bishop of Antioch wrote it in chains", and we read his letter on a
+      // screen. A phone propped in the niche beside the letter, its glass lit, only for that line.
+      const ph = S.started ? Math.min(rise(t, T.bishop - 0.5, 1.2), 1 - rise(t, T.desire, 1.5)) : 0;
+      if (ph > 0.002 && ok('phone')) {
+        ctx.save(); ctx.globalCompositeOperation = 'lighter';
+        const g = ctx.createRadialGradient(163, 572, 4, 163, 572, 90);
+        g.addColorStop(0, `rgba(150,186,240,${0.28 * ph})`); g.addColorStop(1, 'rgba(150,186,240,0)');
+        ctx.fillStyle = g; ctx.fillRect(73, 482, 180, 180); ctx.restore();
+        ctx.globalAlpha = ph; ctx.drawImage(img.phone.i, 146, 543, 34, 58); ctx.globalAlpha = 1;
+      }
       dust(ctx, t, L);
       if (rig) {
         drawHand(ctx, t, 0.45 + 0.55 * Math.min(1, Math.max(L.hand, L.room)));
@@ -183,7 +193,7 @@
       }
       ctx.setTransform(1, 0, 0, 1, 0, 0);
     },
-    preload() { if (S.started) ['lit', 'niche', 'fish', 'table', 'hand'].forEach(S.load); if (rigReady) ['litNo', 'tableNo'].forEach(S.load); },
+    preload() { if (S.started) ['lit', 'niche', 'fish', 'table', 'hand', 'phone'].forEach(S.load); if (rigReady) ['litNo', 'tableNo'].forEach(S.load); },
     // the hand: the one thing the visitor does (from "He came looking" on); the story opens it anyway at its own line
     act: { key: 'hand', min: T => T.looking, auto: T => T.opensTo, load: ['hand', 'table', 'lit'] },
     // the keepsake: the lit room (the door, the table, the bread and the cup) and the line to carry
