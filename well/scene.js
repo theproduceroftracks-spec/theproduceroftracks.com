@@ -21,14 +21,23 @@
   const ROAD_IN = [[2150, 860], [2040, 905], [1930, 962], [1830, 1032], [1760, 1092], STAND];
   const ROAD_OUT = [STAND, [1770, 1060], [1850, 995], [1960, 930], [2080, 860], [2200, 776], [2272, 712]];
   const depth = y => clamp01((y - 670) / (STAND[1] - 670));       // nearer the horizon, smaller
+  /* Shorter Well (Nov 27): a few brief beats with still compositions between them, instead of long walks and a long run.
+     She arrives from the near bend of the road (was the whole road, about 24 s); she sets off for the town and is next seen
+     at the gate (was a 15 s run up the whole road); at "He was waiting" she and the town are seen on the last bend only
+     (was 38 s and 40 s down the whole road). Walking pace is the same as before; the song, its words and cues are unchanged. */
+  const ARRIVE = 6, GO = 4, DIP = 0.8, BACK = 9, TOWN = 8;
+  const ROAD_NEAR = ROAD_IN.slice(3), GATE = ROAD_OUT[ROAD_OUT.length - 1], OUT_NEAR = ROAD_OUT.slice(0, 3);
+  const BACK_NEAR = [[1990, 920], [1900, 985]], TOWN_GATE = [2300, 714], TOWN_NEAR = [[2010, 915], [1960, 960]];
+  const arriveEnd = () => T.first + 1 + ARRIVE;
+  const fadeOut = x => S.still ? (x < 1 ? 1 : 0) : 1 - x, fadeIn = x => S.still ? 1 : x;   // Reduced Motion: a cut
   function jarTime() { return S.actAt != null ? S.actAt : T.auto; }
   function herAt(t) {                                                            // where she is on the road (the camera follows)
     const jd = jarTime(), goStart = Math.max(jd + 1.6, T.auto + 1.2);
-    if (t < 30) return along(ROAD_IN, clamp01((t - (T.first + 1)) / (30 - (T.first + 1))));
+    if (t < arriveEnd()) return along(ROAD_NEAR, clamp01((t - (T.first + 1)) / ARRIVE));
     if (t < goStart) return STAND;
-    if (t < goStart + 15) return along(ROAD_OUT, clamp01((t - goStart) / 15));
-    if (t < T.waiting) return ROAD_OUT[ROAD_OUT.length - 1];
-    return along([[2272, 712], [2200, 776], [2080, 860], [1990, 920], [1900, 985]], clamp01((t - T.waiting) / 38));
+    if (t < goStart + GO) return along(OUT_NEAR, clamp01((t - goStart) / GO));
+    if (t < T.waiting + DIP) return GATE;
+    return along(BACK_NEAR, clamp01((t - T.waiting - DIP) / BACK));
   }
   function cast(t) {
     const out = [], still = S.still, started = S.started;
@@ -44,33 +53,32 @@
     const womanAt = (n, feet, s, a, ph) => out.push({ n, box: [feet[0] - FEET[0] * s, feet[1] - FEET[1] * s + (ph != null ? bob(ph, s) : 0), BOX.woman[2] * s, BOX.woman[3] * s], a });
     if (t < T.first + 1) {
       // not yet come
-    } else if (t < 30) {
-      let p = (t - (T.first + 1)) / (30 - (T.first + 1));
+    } else if (t < arriveEnd()) {
+      let p = (t - (T.first + 1)) / ARRIVE;
       if (still) p = p < 0.5 ? 0 : 1;
-      const f = along(ROAD_IN, p);
+      const f = along(ROAD_NEAR, p);
       womanAt('walk', f, Math.max(0.3, depth(f[1])), clamp01((t - T.first - 1) / 1.2), t * 2.4 * Math.PI);
     } else if (t < jd) {
-      const x = clamp01((t - 30) / 0.8);
+      const x = clamp01((t - arriveEnd()) / 0.8);
       if (x < 1) womanAt('walk', STAND, 1, 1 - x);
       womanAt('stand', STAND, 1, x);
     } else if (t < goStart) {
       const x = clamp01((t - jd) / 0.6);
       if (x < 1) womanAt('stand', STAND, 1, 1 - x);
       womanAt('empty', STAND, 1, x);
-    } else if (t < goStart + 15) {
-      let p = (t - goStart) / 15;
-      if (still) p = p < 0.5 ? 0.1 : 1;
-      const f = along(ROAD_OUT, p);
-      womanAt('go', f, Math.max(0.08, depth(f[1])), 1, t * 3.2 * Math.PI);
-    } else if (t < T.waiting) {
-      womanAt('go', ROAD_OUT[ROAD_OUT.length - 1], depth(712), 1);
+    } else if (t < goStart + GO) {
+      let p = (t - goStart) / GO;
+      if (still) p = 0.1;
+      const f = along(OUT_NEAR, p);
+      womanAt('go', f, Math.max(0.08, depth(f[1])), fadeOut(clamp01((t - goStart - GO + DIP) / DIP)), t * 3.2 * Math.PI);
+    } else if (t < T.waiting + DIP) {
+      womanAt('go', GATE, depth(712), Math.min(fadeIn(clamp01((t - goStart - GO) / DIP)), fadeOut(clamp01((t - T.waiting) / DIP))));
     } else {
-      // she leads the town back down the road to Him (4:30)
-      let p = (t - T.waiting) / 38;
-      if (still) p = p < 0.5 ? 0 : 1;
-      const path = [[2272, 712], [2200, 776], [2080, 860], [1990, 920], [1900, 985]];
-      const f = along(path, p);
-      womanAt('empty', f, Math.max(0.08, depth(f[1])), 1, p < 1 ? t * 2.2 * Math.PI : null);
+      // she leads the town back to Him (4:30), seen on the last bend of the road
+      let p = (t - T.waiting - DIP) / BACK;
+      if (still) p = 1;
+      const f = along(BACK_NEAR, p);
+      womanAt('empty', f, Math.max(0.08, depth(f[1])), fadeIn(clamp01((t - T.waiting - DIP) / DIP)), p < 1 ? t * 2.2 * Math.PI : null);
     }
     // the jar: in her hands, then set down by the water, and left there
     if (t >= jd) {
@@ -84,14 +92,18 @@
     }
     // the people of the town
     if (t >= T.comeSee + 1.2) {
-      let p = clamp01((t - T.waiting - 1.5) / 40);
-      if (still) p = t < T.waiting ? 0 : 1;
-      const f = along([[2300, 714], [2210, 780], [2100, 852], [2010, 915], [1960, 960]], p);
-      const s = Math.max(0.07, depth(f[1]));
-      out.push({ n: 'people', box: [f[0] - PEOPLE.feet[0] * s + 30 * s, f[1] - PEOPLE.feet[1] * s + bob(t * 2 * Math.PI, s * 0.6), PEOPLE.w * s, PEOPLE.h * s],
-        a: clamp01((t - T.comeSee - 1.2) / 1.5) });
+      const tw = townAt(t), f = tw.f, s = Math.max(0.07, depth(f[1]));
+      out.push({ n: 'people', box: [f[0] - PEOPLE.feet[0] * s + 30 * s, f[1] - PEOPLE.feet[1] * s + (tw.walking ? bob(t * 2 * Math.PI, s * 0.6) : 0), PEOPLE.w * s, PEOPLE.h * s],
+        a: tw.a });
     }
     return out;
+  }
+  // the people of the town: at the gate after "Come and see", then (after a brief dip) on the last bend behind her
+  function townAt(t) {
+    if (t < T.waiting + DIP) return { f: TOWN_GATE, p: 0, walking: false,
+      a: Math.min(S.still ? 1 : clamp01((t - T.comeSee - 1.2) / 1.5), fadeOut(clamp01((t - T.waiting) / DIP))) };
+    const t0 = T.waiting + DIP + 1.5, p = S.still ? 1 : clamp01((t - t0) / TOWN);
+    return { f: along(TOWN_NEAR, p), p, walking: p > 0 && p < 1, a: fadeIn(clamp01((t - T.waiting - DIP) / DIP)) };
   }
   function speakMix(t) {
     let m = 0;
@@ -152,14 +164,14 @@
     const withFace = p => { const f = blinking(t, 0.4) ? 'blink' : face(t); return f ? Object.assign({}, p, { _face: Object.assign({}, p._face || {}, { head: f }) }) : p; };
     // the jar leaves her hands at the bottom of her reach and is set on the ground, upright
     const keepJar = p => jarAt && t >= jarAt.t ? Object.assign({}, p, { _detach: { jar: jarAt.from.map((v, i) => lerp(v, jarAt.to[i], still ? 1 : ease(clamp01((t - jarAt.t) / 0.35)))) } }) : p;
-    if (t < 30) {                                                                 // down the road with her jar
-      let p = (t - (T.first + 1)) / (30 - (T.first + 1));
+    if (t < arriveEnd()) {                                                        // the last bend of the road, with her jar
+      let p = (t - (T.first + 1)) / ARRIVE;
       if (still) p = p < 0.5 ? 0 : 1;
-      const f = along(ROAD_IN, p), s = Math.max(0.3, depth(f[1]));
-      return { pose: add(withFace(cyc('woman', 'walk_jar', p * pathLen(ROAD_IN) / (stride('woman', 'walk_jar') * s))), sway), x: f[0], y: f[1], s, a: clamp01((t - T.first - 1) / 1.2) };
+      const f = along(ROAD_NEAR, p), s = Math.max(0.3, depth(f[1]));
+      return { pose: add(withFace(cyc('woman', 'walk_jar', p * pathLen(ROAD_NEAR) / (stride('woman', 'walk_jar') * s))), sway), x: f[0], y: f[1], s, a: clamp01((t - T.first - 1) / 1.2) };
     }
     if (t < jd + 1.2) {                                                           // at the well; then she bends to set the jar down
-      const k = [[30, pose('woman', 'stand_jar'), 0.8], [jd, pose('woman', 'stand_jar')], [jd + 0.1, pose('woman', 'reach'), 1.1]];
+      const k = [[arriveEnd(), pose('woman', 'stand_jar'), 0.8], [jd, pose('woman', 'stand_jar')], [jd + 0.1, pose('woman', 'reach'), 1.1]];
       return { pose: add(withFace(PZ.at(k, t, still)), t < jd ? sway : {}), x: STAND[0], y: STAND[1], s: 1, a: 1 };
     }
     if (!jarAt || jarAt.jd !== jd) {                                              // where her hands are at the bottom of the reach
@@ -172,36 +184,32 @@
       const k = [[jd + 1.2, pose('woman', 'reach')], [jd + 1.6, pose('woman', 'stand'), 0.9]];
       return { pose: keepJar(withFace(PZ.at(k, t, still))), x: STAND[0], y: STAND[1], s: 1, a: 1 };
     }
-    if (t < goStart + 15) {                                                       // she runs to the town, calling
-      let p = (t - goStart) / 15;
-      if (still) p = p < 0.5 ? 0.1 : 1;
-      const f = along(ROAD_OUT, p), s = Math.max(0.08, depth(f[1]));
-      const run = Object.assign({}, cyc('woman', 'run', p * pathLen(ROAD_OUT) / (stride('woman', 'run') * s)), only(pose('woman', 'call'), ARM_R), { _face: { head: 'up' } });
-      return { pose: keepJar(PZ.mix(pose('woman', 'stand'), run, still ? 1 : clamp01((t - goStart) / 0.6))), x: f[0], y: f[1], s, a: 1, flip: true };
+    if (t < goStart + GO) {                                                       // she sets off for the town (a few steps)
+      let p = (t - goStart) / GO;
+      if (still) p = 0.1;
+      const f = along(OUT_NEAR, p), s = Math.max(0.08, depth(f[1]));
+      const run = Object.assign({}, cyc('woman', 'run', p * pathLen(OUT_NEAR) / (stride('woman', 'run') * s)), { _face: { head: 'up' } });
+      return { pose: keepJar(PZ.mix(pose('woman', 'stand'), run, still ? 1 : clamp01((t - goStart) / 0.6))), x: f[0], y: f[1], s, a: fadeOut(clamp01((t - goStart - GO + DIP) / DIP)), flip: true };
     }
-    if (t < T.waiting) {                                                          // at the gate: come and see
-      const g = ROAD_OUT[ROAD_OUT.length - 1];
-      return { pose: keepJar(add(pose('woman', 'call'), still ? {} : { armR_fore: 9 * Math.sin(t * 4) })), x: g[0], y: g[1], s: depth(712), a: 1, flip: true };
+    if (t < T.waiting + DIP) {                                                    // at the gate: come and see (one still call)
+      const k = [[goStart + GO, pose('woman', 'stand')], [T.comeSee - 0.3, pose('woman', 'call'), 0.7]];
+      return { pose: keepJar(PZ.at(k, t, still)), x: GATE[0], y: GATE[1], s: depth(712), flip: true,
+        a: Math.min(fadeIn(clamp01((t - goStart - GO) / DIP)), fadeOut(clamp01((t - T.waiting) / DIP))) };
     }
-    // she leads the town back down the road to Him (4:30)
-    let p = (t - T.waiting) / 38;
-    if (still) p = p < 0.5 ? 0 : 1;
-    const back = [[2272, 712], [2200, 776], [2080, 860], [1990, 920], [1900, 985]];
-    const f = along(back, p), s = Math.max(0.08, depth(f[1]));
-    const turning = !still && t < T.waiting + 0.8;
-    const body = p < 1 ? cyc('woman', 'walk', p * pathLen(back) / (stride('woman', 'walk') * s)) : pose('woman', 'stand');
-    return { pose: keepJar(withFace(turning ? PZ.mix(pose('woman', 'turn'), body, clamp01((t - T.waiting) / 0.8)) : add(body, sway))), x: f[0], y: f[1], s, a: 1, flip: turning && t < T.waiting + 0.4 };
+    // she leads the town back to Him (4:30), seen on the last bend of the road
+    let p = (t - T.waiting - DIP) / BACK;
+    if (still) p = 1;
+    const f = along(BACK_NEAR, p), s = Math.max(0.08, depth(f[1]));
+    const body = p < 1 ? cyc('woman', 'walk', p * pathLen(BACK_NEAR) / (stride('woman', 'walk') * s)) : pose('woman', 'stand');
+    return { pose: keepJar(withFace(p < 1 ? body : add(body, sway))), x: f[0], y: f[1], s, a: fadeIn(clamp01((t - T.waiting - DIP) / DIP)) };
   }
   function townFigures(t) {
     if (!S.started || t < T.comeSee + 1.2) return [];
-    const path = [[2300, 714], [2210, 780], [2100, 852], [2010, 915], [1960, 960]], L = pathLen(path);
-    let p = clamp01((t - T.waiting - 1.5) / 40);
-    if (S.still) p = t < T.waiting ? 0 : 1;
-    const f = along(path, p), s = Math.max(0.07, depth(f[1]));
+    const tw = townAt(t), L = pathLen(TOWN_NEAR), p = tw.p, f = tw.f, s = Math.max(0.07, depth(f[1]));
     const ox = f[0] - PEOPLE.feet[0] * s + 30 * s, oy = f[1] - PEOPLE.feet[1] * s;   // the same group, arranged as in the earlier painting
     return ['person_a', 'person_b', 'person_c'].map((n, i) => {
-      const sf = S.rig(n).sprite_feet, walking = p > 0 && p < 1;
-      return { n, pose: walking ? cyc(n, 'walk', p * L / (stride(n, 'walk') * s) + i * 0.37) : pose(n, 'rest'), x: ox + sf[0] * s, y: oy + sf[1] * s, s, a: clamp01((t - T.comeSee - 1.2) / 1.5) };
+      const sf = S.rig(n).sprite_feet, walking = tw.walking;
+      return { n, pose: walking ? cyc(n, 'walk', p * L / (stride(n, 'walk') * s) + i * 0.37) : pose(n, 'rest'), x: ox + sf[0] * s, y: oy + sf[1] * s, s, a: tw.a };
     });
   }
   function drawFigures(ctx, t, label) {
