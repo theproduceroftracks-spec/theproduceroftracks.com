@@ -396,3 +396,8 @@ body.text .hx-cover { width: 160px; box-shadow: none; }
 @media (prefers-reduced-motion: reduce) {
   .hx-card, .hx-art, .hx-cover, .button, .hx-btn { transition: none !important; }
 }
+
+/* Current song: compact entry beside the existing album hero. */
+.hx-current-song { grid-column:1 / -1; min-width:0; display:flex; align-items:center; gap:.8rem; max-width:28rem; margin-top:1.25rem; color:inherit; font-size:1rem; line-height:1.4; text-underline-offset:.2em; }
+.hx-current-song img { width:4rem; height:4rem; flex:0 0 4rem; object-fit:cover; border-radius:.2rem; }
+.hx-current-song:focus-visible { outline:2px solid currentColor; outline-offset:5px; }
